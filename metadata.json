@@ -1,0 +1,6 @@
+{
+  "name": "ZeroTrustX - Zero Trust Network Access & Identity Security Platform",
+  "description": "Production-grade Zero Trust Network Access (ZTNA) & Identity Security Platform. Continuous verification, adaptive risk scoring, device trust, MFA, and automated access governance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
