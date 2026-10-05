@@ -8,6 +8,7 @@ import { AccessSimulatorModal } from './components/common/AccessSimulatorModal';
 import { ArchitectureFlowModal } from './components/common/ArchitectureFlowModal';
 import { LiveSessionsModal } from './components/common/LiveSessionsModal';
 import { GuidedTourModal } from './components/common/GuidedTourModal';
+import { SplashScreen } from './components/common/SplashScreen';
 
 // Pages
 import { DashboardPage } from './pages/DashboardPage';
@@ -115,9 +116,12 @@ const MainAppContent: React.FC = () => {
 };
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
     <SecurityProvider>
       <MainAppContent />
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
     </SecurityProvider>
   );
 }
