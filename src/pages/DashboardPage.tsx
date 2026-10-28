@@ -81,10 +81,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
 
   // Risk Distribution Donut Data
   const riskDonutData = [
-    { name: 'Low Risk', value: 72, color: '#10b981' },
-    { name: 'Medium Risk', value: 19, color: '#f59e0b' },
-    { name: 'High Risk', value: 7, color: '#f97316' },
-    { name: 'Critical', value: 2, color: '#f43f5e' },
+    { name: 'Low Risk', value: 72, color: 'var(--a-moss-400)' },
+    { name: 'Medium Risk', value: 19, color: 'var(--a-ochre-400)' },
+    { name: 'High Risk', value: 7, color: 'var(--a-ochre-500)' },
+    { name: 'Critical', value: 2, color: 'var(--a-brick-400)' },
   ];
 
   return (
@@ -93,7 +93,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Security Overview</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Security Overview</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               SOC Command Center
             </span>
@@ -136,7 +136,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all flex items-center gap-1.5 text-xs"
+            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-50 hover:border-slate-700 transition-all flex items-center gap-1.5 text-xs"
             title="Refresh Security Telemetry"
           >
             <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-cyan-400' : ''}`} />
@@ -206,7 +206,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Quick ZTNA Quick Actions & Posture Card */}
-        <div className="lg:col-span-4 p-6 rounded-xl bg-[#0d131f]/90 border border-slate-800 flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-4 p-6 rounded-xl panel flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
 
           <div>
@@ -219,7 +219,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
               </span>
             </div>
 
-            <h3 className="text-base font-bold text-white">Continuous Policy Enforcement</h3>
+            <h3 className="text-base font-bold text-slate-50">Continuous Policy Enforcement</h3>
             <p className="text-xs text-slate-400 mt-2 leading-relaxed">
               Every request is authenticated dynamically using contextual device posture, identity trust, and behavioral heuristics.
             </p>
@@ -243,7 +243,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           <div className="mt-6 pt-4 border-t border-slate-800 space-y-2">
             <button
               onClick={() => setIsSimulatorOpen(true)}
-              className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold text-xs transition-all shadow-lg shadow-cyan-900/25 flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-50 font-semibold text-xs transition-all shadow-sm flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
               <span>Launch Policy Simulator</span>
@@ -270,11 +270,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       <GlobalThreatMap />
 
       {/* Real-time Attack Simulation Test Bar */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-950 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <Flame className="w-4 h-4 text-rose-400" />
-            <span className="font-bold text-white text-xs">Live Defense Reflex Simulator</span>
+            <span className="font-bold text-slate-50 text-xs">Live Defense Reflex Simulator</span>
             <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-rose-500/10 text-rose-300 border border-rose-500/20">
               Interactive Test
             </span>
@@ -312,10 +312,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       {/* Charts Row: Access Activity & Risk Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Access Activity Graph */}
-        <div className="lg:col-span-8 p-6 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="lg:col-span-8 p-6 rounded-xl panel">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
-              <h3 className="text-base font-bold text-white">Access Activity</h3>
+              <h3 className="text-base font-bold text-slate-50">Access Activity</h3>
               <p className="text-xs text-slate-400 mt-0.5">
                 Volume of allowed, denied, and step-up authentication challenges.
               </p>
@@ -345,35 +345,35 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
               <AreaChart data={activityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorAllowed" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="var(--a-moss-400)" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="var(--a-moss-400)" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="colorDenied" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="var(--a-brick-400)" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="var(--a-brick-400)" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="colorChallenged" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="var(--a-ochre-400)" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="var(--a-ochre-400)" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="time" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--n-800)" vertical={false} />
+                <XAxis dataKey="time" stroke="var(--n-400)" fontSize={11} tickLine={false} />
+                <YAxis stroke="var(--n-400)" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0b1019',
-                    borderColor: '#334155',
+                    backgroundColor: 'var(--n-900)',
+                    borderColor: 'var(--n-700)',
                     borderRadius: '8px',
                     fontSize: '12px',
-                    color: '#f8fafc',
+                    color: 'var(--n-100)',
                   }}
                 />
                 {(activityFilter === 'all' || activityFilter === 'allowed') && (
                   <Area
                     type="monotone"
                     dataKey="allowed"
-                    stroke="#10b981"
+                    stroke="var(--a-moss-400)"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorAllowed)"
@@ -384,7 +384,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                   <Area
                     type="monotone"
                     dataKey="challenged"
-                    stroke="#f59e0b"
+                    stroke="var(--a-ochre-400)"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorChallenged)"
@@ -395,7 +395,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                   <Area
                     type="monotone"
                     dataKey="denied"
-                    stroke="#f43f5e"
+                    stroke="var(--a-brick-400)"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorDenied)"
@@ -408,9 +408,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Risk Distribution Donut */}
-        <div className="lg:col-span-4 p-6 rounded-xl bg-[#0d131f]/90 border border-slate-800 flex flex-col justify-between">
+        <div className="lg:col-span-4 p-6 rounded-xl panel flex flex-col justify-between">
           <div>
-            <h3 className="text-base font-bold text-white">Risk Distribution</h3>
+            <h3 className="text-base font-bold text-slate-50">Risk Distribution</h3>
             <p className="text-xs text-slate-400 mt-0.5">Categorization across active enterprise sessions.</p>
 
             <div className="h-52 w-full mt-3 flex items-center justify-center">
@@ -431,8 +431,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0b1019',
-                      borderColor: '#334155',
+                      backgroundColor: 'var(--n-900)',
+                      borderColor: 'var(--n-700)',
                       borderRadius: '8px',
                       fontSize: '12px',
                     }}
@@ -449,7 +449,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
               <div key={d.name} className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-900/40">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: d.color }} />
                 <span className="text-slate-300 font-medium text-[11px]">{d.name}</span>
-                <span className="font-mono text-white font-bold ml-auto">{d.value}%</span>
+                <span className="font-mono text-slate-50 font-bold ml-auto">{d.value}%</span>
               </div>
             ))}
           </div>
@@ -457,14 +457,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       </div>
 
       {/* Live Security Events Feed */}
-      <div className="p-6 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+      <div className="p-6 rounded-xl panel">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
             </span>
-            <h3 className="text-base font-bold text-white">Live Security Events</h3>
+            <h3 className="text-base font-bold text-slate-50">Live Security Events</h3>
             <span className="text-xs text-slate-500 font-mono hidden sm:inline">(Real-time SOC stream)</span>
           </div>
 
@@ -490,7 +490,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                    <span className="text-xs font-semibold text-slate-50 group-hover:text-cyan-300 transition-colors">
                       {evt.eventType}
                     </span>
                     <span className="text-slate-500 text-xs">•</span>

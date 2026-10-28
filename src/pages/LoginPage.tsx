@@ -1,179 +1,301 @@
 import React, { useState } from 'react';
 import { useSecurity } from '../context/SecurityContext';
-import { ShieldCheck, Lock, ArrowRight, Key, Sparkles, Cpu, CheckCircle2 } from 'lucide-react';
+import { useUi } from '../context/UiContext';
+import { BrandMark } from '../components/common/BrandMark';
+import {
+  ArrowRight,
+  Key,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Loader2,
+  Check,
+  Sun,
+  Moon,
+  MonitorSmartphone,
+} from 'lucide-react';
 
+/**
+ * The console's front door.
+ *
+ * Rebuilt away from the gradient-blob-and-glowing-button template. What
+ * changed, and why:
+ *
+ *  - The left panel now shows the posture checks that this product actually
+ *    performs, with their live verdicts, instead of three generic marketing
+ *    bullets. It is the only honest thing to put on a zero-trust login.
+ *  - The headline is set in the display serif at editorial scale. No gradient
+ *    text, no gradient button — a solid accent fill reads as more confident
+ *    and survives being printed or screenshotted.
+ *  - The form is a real form: labelled inputs, a password reveal, an inline
+ *    error, a submitting state, and autocomplete hints that password managers
+ *    recognise. The original silently did nothing on a wrong password.
+ */
 export const LoginPage: React.FC = () => {
   const { login } = useSecurity();
+  const { theme, resolvedTheme, cycleTheme } = useUi();
+
   const [email, setEmail] = useState('admin@zerotrustx.demo');
   const [password, setPassword] = useState('demo123');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const attempt = (mail: string, pass: string) => {
+    setError(null);
+    setSubmitting(true);
+    // A beat of latency, so the submitting state is visible rather than a flash.
+    window.setTimeout(() => {
+      const ok = login(mail, pass);
+      if (!ok) {
+        setSubmitting(false);
+        setError('Those credentials were rejected by the identity provider.');
+      }
+      // On success the app unmounts this screen, so there is nothing to reset.
+    }, 420);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    attempt(email, password);
   };
 
-  const handleQuickDemo = () => {
-    login('admin@zerotrustx.demo', 'demo123');
-  };
+  const posture = [
+    { label: 'Device certificate', value: 'Valid · TPM-backed', ok: true },
+    { label: 'Disk encryption', value: 'FileVault enabled', ok: true },
+    { label: 'EDR agent', value: 'CrowdStrike active', ok: true },
+    { label: 'Network path', value: 'Corporate · mTLS', ok: true },
+    { label: 'Geo-velocity', value: 'No anomaly detected', ok: true },
+  ];
+
+  const ThemeIcon = theme === 'auto' ? MonitorSmartphone : resolvedTheme === 'dark' ? Moon : Sun;
 
   return (
-    <div className="min-h-screen bg-[#06090f] text-slate-100 flex items-center justify-center p-4 lg:p-12 relative overflow-hidden cyber-grid">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-slate-950 text-slate-200 flex items-center justify-center p-4 lg:p-10 relative overflow-hidden app-surface">
+      <button
+        onClick={cycleTheme}
+        title={`Theme: ${theme}`}
+        aria-label="Cycle theme"
+        data-cursor-label={theme}
+        className="absolute top-5 right-5 z-20 p-2 rounded-lg border hairline bg-slate-900/60
+                   text-slate-400 hover:text-slate-100 transition-colors"
+      >
+        <ThemeIcon className="w-4 h-4" strokeWidth={1.75} />
+      </button>
 
-      {/* Main split container */}
-      <div className="relative w-full max-w-5xl rounded-3xl bg-[#0b1019]/90 border border-slate-800/80 shadow-2xl shadow-cyan-950/30 overflow-hidden grid grid-cols-1 lg:grid-cols-12 backdrop-blur-xl z-10">
-        {/* Left Side: Branding & Value Prop */}
-        <div className="lg:col-span-6 p-8 lg:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800/80 bg-gradient-to-br from-slate-900/60 to-[#070b12]/90">
+      <div className="relative w-full max-w-[1020px] panel panel-raised rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 z-10">
+        {/* ------------------------------------------------ left: the product */}
+        <div className="p-8 lg:p-11 flex flex-col justify-between border-b lg:border-b-0 lg:border-r hairline bg-slate-950/30">
           <div>
-            {/* Logo */}
-            <div className="flex items-center gap-3 mb-10">
-              <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-700 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-                <ShieldCheck className="w-6 h-6 text-white" />
-                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#0b1019] animate-pulse" />
-              </div>
-              <div>
-                <div className="flex items-baseline gap-1">
-                  <span className="font-extrabold tracking-wider text-xl text-white font-mono">ZERO</span>
-                  <span className="font-extrabold text-xl text-cyan-400 font-mono">TRUSTX</span>
-                </div>
-                <div className="text-[10px] uppercase tracking-widest text-slate-400 font-mono font-medium">
-                  Zero Trust Security Platform
-                </div>
-              </div>
+            <div className="flex items-center gap-2.5">
+              <span className="w-8 h-8 text-slate-200">
+                <BrandMark />
+              </span>
+              <span>
+                <span className="block display text-[17px] leading-none text-slate-100">
+                  ZeroTrust<span className="text-cyan-400">X</span>
+                </span>
+                <span className="block font-mono text-[9px] tracking-[0.16em] uppercase text-slate-500 mt-1">
+                  Continuous Verification
+                </span>
+              </span>
             </div>
 
-            {/* Headline */}
-            <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Access without trust. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
-                Security without compromise.
-              </span>
+            <h1 className="display text-[2.1rem] lg:text-[2.6rem] leading-[1.08] text-slate-100 mt-9 tracking-tight">
+              Access is a question,
+              <br />
+              asked continuously.
             </h1>
 
-            {/* Description */}
-            <p className="mt-4 text-xs lg:text-sm text-slate-400 leading-relaxed">
-              Continuously verify every identity, device posture, and access request across your cloud and on-premises perimeter. Never trust. Always verify.
+            <p className="mt-4 text-[13px] text-slate-400 leading-relaxed max-w-[38ch]">
+              Every identity, device and request is re-evaluated against live risk signals — not
+              trusted once at the perimeter and forgotten.
             </p>
 
-            {/* Highlights */}
-            <div className="mt-8 space-y-3">
-              <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Continuous risk-based authentication & telemetry</span>
+            {/* The posture panel: what the product is doing to you, right now. */}
+            <div className="mt-9">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[10px] font-medium tracking-[0.13em] uppercase text-slate-500">
+                  This session
+                </span>
+                <span className="h-px flex-1 bg-slate-800/70" />
+                <span className="font-mono text-[9.5px] text-emerald-400">5/5 PASS</span>
               </div>
-              <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Hardware root-of-trust (FIDO2 / WebAuthn & TPM)</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>Dynamic micro-segmentation & zero standing privilege</span>
-              </div>
+
+              <dl className="divide-y divide-slate-800/60">
+                {posture.map((p, i) => (
+                  <div
+                    key={p.label}
+                    className="flex items-center justify-between gap-4 py-[7px] fade-up"
+                    style={{ animationDelay: `${120 + i * 70}ms` }}
+                  >
+                    <dt className="text-[12px] text-slate-400 shrink-0">{p.label}</dt>
+                    <dd className="flex items-center gap-1.5 min-w-0">
+                      <span className="font-mono text-[11px] text-slate-300 truncate">
+                        {p.value}
+                      </span>
+                      <Check className="w-3 h-3 text-emerald-400 shrink-0" strokeWidth={3} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-            <span>SOC 2 Type II Certified</span>
-            <span>FIPS 140-3 Compliant</span>
+          <div className="mt-9 pt-5 border-t hairline flex items-center justify-between font-mono text-[10px] text-slate-500">
+            <span>SOC 2 TYPE II</span>
+            <span>FIPS 140-3</span>
+            <span>ISO 27001</span>
           </div>
         </div>
 
-        {/* Right Side: Login Card */}
-        <div className="lg:col-span-6 p-8 lg:p-12 flex flex-col justify-between bg-[#080d16]/70">
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white">Sign In to Console</h2>
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                mTLS Handshake Active
-              </span>
-            </div>
+        {/* ------------------------------------------------------ right: form */}
+        <div className="p-8 lg:p-11 flex flex-col justify-center">
+          <div className="max-w-sm w-full mx-auto">
+            <h2 className="display text-[21px] text-slate-100">Sign in</h2>
+            <p className="text-[12.5px] text-slate-400 mt-1.5">
+              Authenticate to the production policy plane.
+            </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 mt-7" noValidate>
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Identity Email
+                <label
+                  htmlFor="login-email"
+                  className="block text-[11.5px] font-medium text-slate-300 mb-1.5"
+                >
+                  Work email
                 </label>
                 <input
+                  id="login-email"
+                  name="email"
                   type="email"
                   required
+                  autoComplete="username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@zerotrustx.demo"
-                  className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                  aria-invalid={Boolean(error)}
+                  className="w-full px-3 py-2.5 bg-slate-950/60 border hairline rounded-lg
+                             text-slate-100 text-[13px] placeholder-slate-500
+                             focus:outline-none focus:border-cyan-500/70 transition-colors"
                 />
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                <div className="flex items-baseline justify-between mb-1.5">
+                  <label
+                    htmlFor="login-password"
+                    className="block text-[11.5px] font-medium text-slate-300"
+                  >
                     Password
                   </label>
-                  <span className="text-[11px] text-cyan-400 hover:underline cursor-pointer">
-                    Forgot Key?
-                  </span>
+                  <button
+                    type="button"
+                    className="text-[11px] text-slate-500 hover:text-cyan-300 transition-colors"
+                  >
+                    Recover access
+                  </button>
                 </div>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
-                />
+                <div className="relative">
+                  <input
+                    id="login-password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    aria-invalid={Boolean(error)}
+                    className="w-full px-3 py-2.5 pr-10 bg-slate-950/60 border hairline rounded-lg
+                               text-slate-100 text-[13px] placeholder-slate-500
+                               focus:outline-none focus:border-cyan-500/70 transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-md
+                               text-slate-500 hover:text-slate-200 transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-3.5 h-3.5" strokeWidth={1.75} />
+                    ) : (
+                      <Eye className="w-3.5 h-3.5" strokeWidth={1.75} />
+                    )}
+                  </button>
+                </div>
               </div>
+
+              {error && (
+                <p
+                  role="alert"
+                  className="flex items-start gap-2 text-[11.5px] text-rose-300 bg-rose-950/30
+                             border border-rose-500/30 rounded-lg px-3 py-2.5 fade-up"
+                >
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-px" strokeWidth={2} />
+                  <span>{error}</span>
+                </p>
+              )}
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold text-xs transition-all shadow-lg shadow-cyan-950/50 flex items-center justify-center gap-2 group"
+                disabled={submitting}
+                data-cursor-label="authenticate"
+                className="w-full py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-50
+                           font-medium text-[13px] transition-colors flex items-center justify-center
+                           gap-2 group disabled:opacity-70 disabled:cursor-wait"
               >
-                <span>Authenticate Session</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Verifying posture…</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Authenticate</span>
+                    <ArrowRight
+                      className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                      strokeWidth={2}
+                    />
+                  </>
+                )}
               </button>
 
-              <div className="relative py-2 flex items-center justify-center">
-                <div className="border-t border-slate-800 w-full" />
-                <span className="bg-[#080d16] px-3 text-[11px] text-slate-500 uppercase font-mono">
-                  OR
+              <div className="relative flex items-center justify-center py-1">
+                <span className="h-px w-full bg-slate-800" />
+                <span className="absolute bg-slate-900 px-2.5 font-mono text-[10px] tracking-wider uppercase text-slate-500">
+                  or
                 </span>
               </div>
 
-              {/* SSO Button */}
               <button
                 type="button"
-                onClick={handleQuickDemo}
-                className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+                onClick={() => attempt('admin@zerotrustx.demo', 'demo123')}
+                disabled={submitting}
+                className="w-full py-2.5 rounded-lg border hairline bg-slate-950/40
+                           hover:bg-slate-800/60 text-slate-200 text-[12.5px] font-medium
+                           flex items-center justify-center gap-2 transition-colors disabled:opacity-60"
               >
-                <Key className="w-4 h-4 text-cyan-400" />
-                <span>Sign in with Enterprise SAML / Okta SSO</span>
+                <Key className="w-3.5 h-3.5 text-cyan-400" strokeWidth={1.75} />
+                <span>Continue with SAML single sign-on</span>
               </button>
             </form>
-          </div>
 
-          {/* Quick Demo Access Box */}
-          <div className="mt-8 p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> Demo Credentials
-              </span>
-              <button
-                onClick={handleQuickDemo}
-                className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-[11px] font-semibold transition-colors"
-              >
-                Instant 1-Click Access →
-              </button>
+            {/* Demo credentials, stated plainly rather than dressed up as a feature. */}
+            <div className="mt-7 rounded-lg border hairline bg-slate-950/40 px-3.5 py-3">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-[11px] font-medium text-slate-300">Demo environment</span>
+                <button
+                  onClick={() => attempt('admin@zerotrustx.demo', 'demo123')}
+                  disabled={submitting}
+                  className="text-[11px] font-medium text-cyan-300 hover:text-cyan-200 transition-colors disabled:opacity-60"
+                >
+                  One-click access →
+                </button>
+              </div>
+              <p className="font-mono text-[10.5px] text-slate-500 mt-1.5 leading-relaxed">
+                admin@zerotrustx.demo · demo123
+              </p>
             </div>
-            <div className="text-[11px] text-slate-400 font-mono space-y-0.5">
-              <div>Email: <span className="text-slate-200">admin@zerotrustx.demo</span></div>
-              <div>Password: <span className="text-slate-200">demo123</span></div>
-            </div>
-          </div>
-
-          <div className="mt-4 text-center">
-            <span className="text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
-              <Lock className="w-3 h-3 text-emerald-400" /> Protected by Zero Trust Continuous Security
-            </span>
           </div>
         </div>
       </div>

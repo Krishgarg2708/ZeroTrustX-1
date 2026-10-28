@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useSecurity } from '../context/SecurityContext';
+import { PinButton } from '../components/common/PinButton';
 import { User, RiskLevel } from '../types';
 import { StatusBadge, RiskScoreBadge } from '../components/common/StatusBadge';
 import { UserDetailsDrawer } from './UserDetailsDrawer';
@@ -87,7 +88,7 @@ export const UsersPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Identity Management</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Identity Management</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               IAM Directory
             </span>
@@ -99,7 +100,7 @@ export const UsersPage: React.FC = () => {
 
         <button
           onClick={() => setIsAddUserOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-2 shadow-lg shadow-cyan-900/30 transition-all self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-50 font-semibold text-xs flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <UserPlus className="w-4 h-4" />
           <span>Add User Identity</span>
@@ -108,22 +109,22 @@ export const UsersPage: React.FC = () => {
 
       {/* 4 Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Total Users</span>
-          <div className="text-2xl font-bold text-white font-mono mt-1">2,481</div>
+          <div className="text-2xl font-bold text-slate-50 font-mono mt-1">2,481</div>
           <span className="text-[10px] text-emerald-400 font-mono">+14 onboarded this week</span>
         </div>
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Active Users</span>
           <div className="text-2xl font-bold text-emerald-400 font-mono mt-1">2,392</div>
           <span className="text-[10px] text-slate-400 font-mono">96.4% actively verified</span>
         </div>
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Privileged Users</span>
           <div className="text-2xl font-bold text-amber-400 font-mono mt-1">48</div>
           <span className="text-[10px] text-amber-300/80 font-mono">Mandatory FIDO2 Keys</span>
         </div>
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Suspended Users</span>
           <div className="text-2xl font-bold text-rose-400 font-mono mt-1">12</div>
           <span className="text-[10px] text-rose-300/80 font-mono">Quarantined / Exited</span>
@@ -139,7 +140,7 @@ export const UsersPage: React.FC = () => {
             placeholder="Search by name, email, employee ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-50 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -152,7 +153,7 @@ export const UsersPage: React.FC = () => {
               className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors shrink-0 ${
                 departmentFilter === dept
                   ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30'
-                  : 'text-slate-400 hover:text-white bg-slate-950/60'
+                  : 'text-slate-400 hover:text-slate-50 bg-slate-950/60'
               }`}
             >
               {dept === 'all' ? 'All' : dept}
@@ -162,7 +163,7 @@ export const UsersPage: React.FC = () => {
       </div>
 
       {/* Users Table */}
-      <div className="rounded-xl border border-slate-800 bg-[#0d131f]/90 overflow-hidden shadow-xl">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[11px] font-mono border-b border-slate-800">
@@ -185,7 +186,7 @@ export const UsersPage: React.FC = () => {
                   onClick={() => handleRowClick(u)}
                   className="hover:bg-slate-900/50 transition-colors group cursor-pointer"
                 >
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       <img
                         src={u.avatar}
@@ -193,45 +194,46 @@ export const UsersPage: React.FC = () => {
                         className="w-8 h-8 rounded-full object-cover border border-slate-700"
                       />
                       <div>
-                        <div className="font-semibold text-white group-hover:text-cyan-300 flex items-center gap-1.5">
+                        <div className="font-semibold text-slate-50 group-hover:text-cyan-300 flex items-center gap-1.5">
                           <span>{u.name}</span>
                           {u.privileged && (
                             <span className="w-1.5 h-1.5 rounded-full bg-rose-400" title="Privileged User" />
                           )}
+                          <PinButton entry={{ id: `user:${u.id}`, kind: 'user', label: u.name }} />
                         </div>
                         <div className="text-[11px] text-slate-400">{u.email}</div>
                       </div>
                     </div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap font-medium text-slate-200">
+                  <td className="px-4 density-row whitespace-nowrap font-medium text-slate-200">
                     {u.role}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">
                       {u.department}
                     </span>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <StatusBadge status={u.mfaStatus} size="sm" />
                     <div className="text-[10px] text-slate-500 font-mono mt-0.5">{u.mfaMethod}</div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <StatusBadge status={u.deviceTrust} size="sm" />
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <RiskScoreBadge score={u.riskScore} />
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <StatusBadge status={u.status} size="sm" />
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap font-mono text-slate-400 text-[11px]">
+                  <td className="px-4 density-row whitespace-nowrap font-mono text-slate-400 text-[11px]">
                     {u.lastActive}
                   </td>
 
@@ -290,7 +292,7 @@ export const UsersPage: React.FC = () => {
               placeholder="e.g. Vikram Singhania"
               value={newUserName}
               onChange={(e) => setNewUserName(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
             />
           </div>
 
@@ -302,7 +304,7 @@ export const UsersPage: React.FC = () => {
               placeholder="e.g. vikram@zerotrustx.demo"
               value={newUserEmail}
               onChange={(e) => setNewUserEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
             />
           </div>
 
@@ -312,7 +314,7 @@ export const UsersPage: React.FC = () => {
               <select
                 value={newUserDept}
                 onChange={(e) => setNewUserDept(e.target.value as any)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
               >
                 <option value="SOC">SOC</option>
                 <option value="Finance">Finance</option>
@@ -331,7 +333,7 @@ export const UsersPage: React.FC = () => {
                 placeholder="e.g. Security Analyst"
                 value={newUserRole}
                 onChange={(e) => setNewUserRole(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
               >
               </input>
             </div>
@@ -339,7 +341,7 @@ export const UsersPage: React.FC = () => {
 
           <div className="pt-2 flex items-center justify-between p-3 rounded-lg bg-slate-900/60 border border-slate-800">
             <div>
-              <span className="font-semibold text-white block">Privileged Access Account</span>
+              <span className="font-semibold text-slate-50 block">Privileged Access Account</span>
               <span className="text-[11px] text-slate-400">Requires mandatory hardware key for all sessions</span>
             </div>
             <input
@@ -354,13 +356,13 @@ export const UsersPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAddUserOpen(false)}
-              className="px-4 py-2 rounded-xl text-slate-400 hover:text-white bg-slate-900 border border-slate-700 font-medium"
+              className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-50 bg-slate-900 border border-slate-700 font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold shadow-lg shadow-cyan-950/40"
+              className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-50 font-semibold shadow-sm"
             >
               Provision Identity
             </button>

@@ -126,7 +126,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
             placeholder="e.g. Production Cluster Access Policy"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -137,7 +137,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe what access this policy enforces..."
-            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 resize-none"
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500 resize-none"
           />
         </div>
 
@@ -147,7 +147,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as any)}
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
             >
               <option value="active">Active (Enforced)</option>
               <option value="draft">Draft (Audit Mode Only)</option>
@@ -163,7 +163,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
               max={99}
               value={priority}
               onChange={(e) => setPriority(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
             />
           </div>
         </div>
@@ -174,7 +174,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
             type="text"
             value={roles}
             onChange={(e) => setRoles(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -184,7 +184,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
             type="text"
             value={resources}
             onChange={(e) => setResources(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-50 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -280,13 +280,13 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-slate-400 hover:text-white bg-slate-900 border border-slate-700"
+            className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-50 bg-slate-900 border border-slate-700"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold shadow-lg shadow-cyan-950/40"
+            className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-50 font-semibold shadow-sm"
           >
             {policy ? 'Save Changes' : 'Create Policy Rule'}
           </button>

@@ -32,7 +32,7 @@ export const RolePermissionsDrawer: React.FC<RolePermissionsDrawerProps> = ({
         {/* Role Overview Box */}
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-50 flex items-center gap-2">
               <KeyRound className="w-4 h-4 text-cyan-400" />
               <span>{role.name} Entitlements</span>
             </h4>
@@ -64,7 +64,7 @@ export const RolePermissionsDrawer: React.FC<RolePermissionsDrawerProps> = ({
                     className="p-3 rounded-lg bg-slate-950 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
                     <div>
-                      <div className="font-semibold text-white">{perm.label}</div>
+                      <div className="font-semibold text-slate-50">{perm.label}</div>
                       <div className="text-[10px] text-slate-500 font-mono">ID: {perm.id}</div>
                     </div>
 
@@ -80,7 +80,7 @@ export const RolePermissionsDrawer: React.FC<RolePermissionsDrawerProps> = ({
                             }
                             className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-medium uppercase transition-all flex items-center gap-1 border ${
                               isGranted
-                                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
+                                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
                                 : 'bg-slate-900 text-slate-500 border-slate-800 hover:text-slate-400'
                             }`}
                           >

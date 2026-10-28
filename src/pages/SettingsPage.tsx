@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSecurity } from '../context/SecurityContext';
+import { WorkspaceSettings } from '../components/common/WorkspaceSettings';
 import {
   Settings,
   Shield,
@@ -18,7 +19,7 @@ import {
 export const SettingsPage: React.FC = () => {
   const { settings, updateSettings, resetToDemoDefaults, addToast } = useSecurity();
 
-  const [activeTab, setActiveTab] = useState<'security' | 'auth' | 'org' | 'notifications'>('security');
+  const [activeTab, setActiveTab] = useState<'security' | 'auth' | 'org' | 'notifications' | 'workspace'>('security');
 
   const [sessionTimeout, setSessionTimeout] = useState(settings.sessionTimeoutMinutes);
   const [minTrustScore, setMinTrustScore] = useState(settings.minDeviceTrustScore);
@@ -47,7 +48,7 @@ export const SettingsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Platform Settings</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Platform Settings</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               Zero Trust Policy Config
             </span>
@@ -69,13 +70,13 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       {/* Settings Navigation Tabs */}
-      <div className="flex items-center gap-2 p-1.5 bg-slate-900/60 rounded-xl border border-slate-800 w-fit">
+      <div className="flex items-center gap-2 p-1.5 bg-slate-900/60 rounded-xl border border-slate-800 w-fit max-w-full overflow-x-auto">
         <button
           onClick={() => setActiveTab('security')}
           className={`px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
             activeTab === 'security'
-              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.15)]'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+              : 'text-slate-400 hover:text-slate-50'
           }`}
         >
           <Shield className="w-3.5 h-3.5" />
@@ -86,8 +87,8 @@ export const SettingsPage: React.FC = () => {
           onClick={() => setActiveTab('auth')}
           className={`px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
             activeTab === 'auth'
-              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.15)]'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+              : 'text-slate-400 hover:text-slate-50'
           }`}
         >
           <KeyRound className="w-3.5 h-3.5" />
@@ -98,24 +99,41 @@ export const SettingsPage: React.FC = () => {
           onClick={() => setActiveTab('org')}
           className={`px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
             activeTab === 'org'
-              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.15)]'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+              : 'text-slate-400 hover:text-slate-50'
           }`}
         >
           <Globe className="w-3.5 h-3.5" />
           <span>Organization & Gateway</span>
         </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('workspace')}
+          className={`px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
+            activeTab === 'workspace'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+              : 'text-slate-400 hover:text-slate-50'
+          }`}
+        >
+          <Sliders className="w-3.5 h-3.5" />
+          <span>Workspace</span>
+        </button>
       </div>
 
+      {/* Per-operator preferences live outside the form: they apply instantly
+          and must not be swept up by "Apply Global Settings". */}
+      {activeTab === 'workspace' && <WorkspaceSettings />}
+
       {/* Main Settings Form */}
-      <form onSubmit={handleSave} className="space-y-5">
+      <form onSubmit={handleSave} className={`space-y-5 ${activeTab === 'workspace' ? 'hidden' : ''}`}>
         {activeTab === 'security' && (
           <div className="space-y-4">
             {/* Auto Block Threshold Slider Card */}
-            <div className="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-2xl panel space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-50 flex items-center gap-2">
                     <Sliders className="w-4 h-4 text-cyan-400" />
                     <span>Automated Perimeter Block Threshold</span>
                   </h3>
@@ -143,10 +161,10 @@ export const SettingsPage: React.FC = () => {
             </div>
 
             {/* Device Trust Threshold Slider Card */}
-            <div className="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-2xl panel space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-50 flex items-center gap-2">
                     <Laptop className="w-4 h-4 text-cyan-400" />
                     <span>Minimum Device Compliance Score</span>
                   </h3>
@@ -174,9 +192,9 @@ export const SettingsPage: React.FC = () => {
             </div>
 
             {/* Continuous Auth Interval */}
-            <div className="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800 flex items-center justify-between">
+            <div className="p-5 rounded-2xl panel flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-white">Continuous Posture Verification Interval</h3>
+                <h3 className="text-sm font-bold text-slate-50">Continuous Posture Verification Interval</h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   How often active background sessions perform cryptographic mTLS and device checks.
                 </p>
@@ -194,9 +212,9 @@ export const SettingsPage: React.FC = () => {
 
             {/* Toggles */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800 flex items-center justify-between">
+              <div className="p-4 rounded-xl panel flex items-center justify-between">
                 <div>
-                  <span className="font-semibold text-white block text-xs">Mandatory EDR for Production</span>
+                  <span className="font-semibold text-slate-50 block text-xs">Mandatory EDR for Production</span>
                   <span className="text-[11px] text-slate-400">CrowdStrike/Defender must report green</span>
                 </div>
                 <input
@@ -207,9 +225,9 @@ export const SettingsPage: React.FC = () => {
                 />
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800 flex items-center justify-between">
+              <div className="p-4 rounded-xl panel flex items-center justify-between">
                 <div>
-                  <span className="font-semibold text-white block text-xs">Strict Geofencing Protection</span>
+                  <span className="font-semibold text-slate-50 block text-xs">Strict Geofencing Protection</span>
                   <span className="text-[11px] text-slate-400">Disallow unknown Tor/Proxy IP egress</span>
                 </div>
                 <input
@@ -226,9 +244,9 @@ export const SettingsPage: React.FC = () => {
         {activeTab === 'auth' && (
           <div className="space-y-4">
             {/* Session Timeout */}
-            <div className="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800 flex items-center justify-between">
+            <div className="p-5 rounded-2xl panel flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-white">Maximum Session Lifetime</h3>
+                <h3 className="text-sm font-bold text-slate-50">Maximum Session Lifetime</h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   Forces full re-authentication when token reaches maximum lifetime.
                 </p>
@@ -240,16 +258,16 @@ export const SettingsPage: React.FC = () => {
                   max={480}
                   value={sessionTimeout}
                   onChange={(e) => setSessionTimeout(Number(e.target.value))}
-                  className="w-20 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-white text-center focus:outline-none"
+                  className="w-20 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-50 text-center focus:outline-none"
                 />
                 <span className="text-xs text-slate-400">minutes</span>
               </div>
             </div>
 
             {/* Hardware Key Enforcement */}
-            <div className="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800 flex items-center justify-between">
+            <div className="p-5 rounded-2xl panel flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-white">Require Hardware FIDO2 for Privileged Accounts</h3>
+                <h3 className="text-sm font-bold text-slate-50">Require Hardware FIDO2 for Privileged Accounts</h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   Enforces YubiKey / Google Titan / WebAuthn passkeys for SOC Analysts, DevOps, and Admins.
                 </p>
@@ -265,7 +283,7 @@ export const SettingsPage: React.FC = () => {
         )}
 
         {activeTab === 'org' && (
-          <div className="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800 space-y-4 text-xs">
+          <div className="p-5 rounded-2xl panel space-y-4 text-xs">
             <div>
               <label className="block text-slate-400 font-medium mb-1">Organization Realm</label>
               <input
@@ -293,7 +311,7 @@ export const SettingsPage: React.FC = () => {
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shadow-lg shadow-cyan-950/40 flex items-center gap-2 transition-all"
+            className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-50 font-semibold text-xs shadow-sm flex items-center gap-2 transition-all"
           >
             <CheckCircle2 className="w-4 h-4" />
             <span>Apply Global Settings</span>

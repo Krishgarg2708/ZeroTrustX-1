@@ -39,7 +39,7 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
         {/* Event Header Banner */}
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-base font-bold text-white flex items-center gap-2">
+            <span className="text-base font-bold text-slate-50 flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-cyan-400" />
               <span>{event.eventType}</span>
             </span>
@@ -59,7 +59,7 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
               <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5 text-cyan-400" /> Subject Identity
               </span>
-              <div className="font-semibold text-white">{event.user}</div>
+              <div className="font-semibold text-slate-50">{event.user}</div>
               <div className="text-[10px] text-slate-400">{event.userEmail}</div>
             </div>
 
@@ -67,7 +67,7 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
               <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
                 <Laptop className="w-3.5 h-3.5 text-cyan-400" /> Client Hardware
               </span>
-              <div className="font-semibold text-white">{event.device}</div>
+              <div className="font-semibold text-slate-50">{event.device}</div>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
@@ -81,7 +81,7 @@ export const EventDetailsDrawer: React.FC<EventDetailsDrawerProps> = ({
               <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 text-cyan-400" /> Geo Origin
               </span>
-              <div className="text-white">{event.location}</div>
+              <div className="text-slate-50">{event.location}</div>
             </div>
           </div>
         </div>

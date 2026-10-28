@@ -53,11 +53,11 @@ export const UserDetailsDrawer: React.FC<UserDetailsDrawerProps> = ({
           <img
             src={user.avatar}
             alt={user.name}
-            className="w-14 h-14 rounded-full object-cover border-2 border-cyan-500/40 shadow-lg shadow-cyan-950/40"
+            className="w-14 h-14 rounded-full object-cover border-2 border-cyan-500/40 shadow-sm"
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white">{user.name}</h3>
+              <h3 className="text-base font-bold text-slate-50">{user.name}</h3>
               <StatusBadge status={user.status} />
             </div>
             <p className="text-slate-400 mt-0.5">{user.email}</p>
@@ -113,7 +113,7 @@ export const UserDetailsDrawer: React.FC<UserDetailsDrawerProps> = ({
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
               <span className="text-slate-400 text-[11px] block">MFA Status</span>
-              <span className="font-semibold text-white capitalize">{user.mfaStatus}</span>
+              <span className="font-semibold text-slate-50 capitalize">{user.mfaStatus}</span>
             </div>
             <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
               <span className="text-slate-400 text-[11px] block">Primary Auth Factor</span>
@@ -145,7 +145,7 @@ export const UserDetailsDrawer: React.FC<UserDetailsDrawerProps> = ({
                   className="p-3 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between"
                 >
                   <div>
-                    <div className="font-semibold text-white">{d.name}</div>
+                    <div className="font-semibold text-slate-50">{d.name}</div>
                     <div className="text-[11px] text-slate-400 font-mono">
                       {d.os} • {d.edrStatus}
                     </div>

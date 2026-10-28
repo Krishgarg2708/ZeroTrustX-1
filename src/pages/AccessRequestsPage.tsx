@@ -52,7 +52,7 @@ export const AccessRequestsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Access Requests</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Access Requests</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               Zero Trust Evaluation Panel
             </span>
@@ -88,7 +88,7 @@ export const AccessRequestsPage: React.FC = () => {
             placeholder="Search by ID, user or resource..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-50 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -101,7 +101,7 @@ export const AccessRequestsPage: React.FC = () => {
               className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-colors shrink-0 ${
                 statusFilter === status
                   ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30'
-                  : 'text-slate-400 hover:text-white bg-slate-950/60'
+                  : 'text-slate-400 hover:text-slate-50 bg-slate-950/60'
               }`}
             >
               {status}
@@ -111,7 +111,7 @@ export const AccessRequestsPage: React.FC = () => {
       </div>
 
       {/* Main Table */}
-      <div className="rounded-xl border border-slate-800 bg-[#0d131f]/90 overflow-hidden shadow-xl">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[11px] font-mono border-b border-slate-800">
@@ -142,29 +142,29 @@ export const AccessRequestsPage: React.FC = () => {
                     className="hover:bg-slate-900/50 transition-colors group cursor-pointer"
                     onClick={() => handleOpenReview(req)}
                   >
-                    <td className="px-4 py-3.5 font-mono text-cyan-400 font-semibold whitespace-nowrap">
+                    <td className="px-4 density-row font-mono text-cyan-400 font-semibold whitespace-nowrap">
                       {req.id}
                     </td>
 
-                    <td className="px-4 py-3.5 whitespace-nowrap">
-                      <div className="font-semibold text-white group-hover:text-cyan-300">
+                    <td className="px-4 density-row whitespace-nowrap">
+                      <div className="font-semibold text-slate-50 group-hover:text-cyan-300">
                         {req.userName}
                       </div>
                       <div className="text-[11px] text-slate-400">{req.userDepartment}</div>
                     </td>
 
-                    <td className="px-4 py-3.5">
+                    <td className="px-4 density-row">
                       <div className="font-medium text-slate-200 line-clamp-1 max-w-[220px]">
                         {req.resource}
                       </div>
                       <div className="text-[10px] text-slate-500 font-mono">{req.resourceCategory}</div>
                     </td>
 
-                    <td className="px-4 py-3.5 whitespace-nowrap font-mono text-slate-300">
+                    <td className="px-4 density-row whitespace-nowrap font-mono text-slate-300">
                       {req.requestedRole}
                     </td>
 
-                    <td className="px-4 py-3.5 whitespace-nowrap">
+                    <td className="px-4 density-row whitespace-nowrap">
                       <div className="flex items-center gap-1.5 text-slate-300">
                         <Laptop className="w-3.5 h-3.5 text-slate-400" />
                         <span>{req.deviceName.split(' ')[0]} {req.deviceName.split(' ')[1] || ''}</span>
@@ -174,15 +174,15 @@ export const AccessRequestsPage: React.FC = () => {
                       </span>
                     </td>
 
-                    <td className="px-4 py-3.5 whitespace-nowrap">
+                    <td className="px-4 density-row whitespace-nowrap">
                       <RiskScoreBadge score={req.riskScore} />
                     </td>
 
-                    <td className="px-4 py-3.5 whitespace-nowrap font-mono text-slate-400 text-[11px]">
+                    <td className="px-4 density-row whitespace-nowrap font-mono text-slate-400 text-[11px]">
                       {req.requestedAt}
                     </td>
 
-                    <td className="px-4 py-3.5 whitespace-nowrap">
+                    <td className="px-4 density-row whitespace-nowrap">
                       <StatusBadge status={req.status} size="sm" />
                     </td>
 

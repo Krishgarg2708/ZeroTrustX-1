@@ -45,19 +45,19 @@ export const RiskAnalyticsPage: React.FC = () => {
 
   // Category Bar Data
   const categoryData = [
-    { category: 'Authentication', riskIndex: 32, max: 100, fill: '#06b6d4' },
-    { category: 'Device Posture', riskIndex: 44, max: 100, fill: '#f59e0b' },
-    { category: 'Geo Location', riskIndex: 26, max: 100, fill: '#10b981' },
-    { category: 'Behavioral', riskIndex: 58, max: 100, fill: '#f97316' },
-    { category: 'Privileged Access', riskIndex: 68, max: 100, fill: '#f43f5e' },
+    { category: 'Authentication', riskIndex: 32, max: 100, fill: 'var(--a-sig-400)' },
+    { category: 'Device Posture', riskIndex: 44, max: 100, fill: 'var(--a-ochre-400)' },
+    { category: 'Geo Location', riskIndex: 26, max: 100, fill: 'var(--a-moss-400)' },
+    { category: 'Behavioral', riskIndex: 58, max: 100, fill: 'var(--a-ochre-500)' },
+    { category: 'Privileged Access', riskIndex: 68, max: 100, fill: 'var(--a-brick-400)' },
   ];
 
   // Risk Donut Data
   const vectorDonut = [
-    { name: 'Credential Stuffing', value: 35, color: '#f43f5e' },
-    { name: 'Unpatched OS/EDR', value: 28, color: '#f97316' },
-    { name: 'Impossible Velocity', value: 22, color: '#f59e0b' },
-    { name: 'Off-hours Anomaly', value: 15, color: '#06b6d4' },
+    { name: 'Credential Stuffing', value: 35, color: 'var(--a-brick-400)' },
+    { name: 'Unpatched OS/EDR', value: 28, color: 'var(--a-ochre-500)' },
+    { name: 'Impossible Velocity', value: 22, color: 'var(--a-ochre-400)' },
+    { name: 'Off-hours Anomaly', value: 15, color: 'var(--a-sig-400)' },
   ];
 
   // Mock Heatmap: 7 days x 8 hours blocks
@@ -80,7 +80,7 @@ export const RiskAnalyticsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Risk Analytics</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Risk Analytics</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               Heuristic Engine
             </span>
@@ -97,7 +97,7 @@ export const RiskAnalyticsPage: React.FC = () => {
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
-              className="bg-transparent text-white font-medium focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-50 font-medium focus:outline-none cursor-pointer"
             >
               <option value="all" className="bg-slate-900">All Departments</option>
               <option value="SOC" className="bg-slate-900">SOC</option>
@@ -112,7 +112,7 @@ export const RiskAnalyticsPage: React.FC = () => {
             <button
               onClick={() => setSelectedTime('7d')}
               className={`px-3 py-1 rounded-lg font-medium transition-colors ${
-                selectedTime === '7d' ? 'bg-cyan-500/20 text-cyan-300 font-semibold' : 'text-slate-400 hover:text-white'
+                selectedTime === '7d' ? 'bg-cyan-500/20 text-cyan-300 font-semibold' : 'text-slate-400 hover:text-slate-50'
               }`}
             >
               7D
@@ -120,7 +120,7 @@ export const RiskAnalyticsPage: React.FC = () => {
             <button
               onClick={() => setSelectedTime('30d')}
               className={`px-3 py-1 rounded-lg font-medium transition-colors ${
-                selectedTime === '30d' ? 'bg-cyan-500/20 text-cyan-300 font-semibold' : 'text-slate-400 hover:text-white'
+                selectedTime === '30d' ? 'bg-cyan-500/20 text-cyan-300 font-semibold' : 'text-slate-400 hover:text-slate-50'
               }`}
             >
               30D
@@ -128,7 +128,7 @@ export const RiskAnalyticsPage: React.FC = () => {
             <button
               onClick={() => setSelectedTime('90d')}
               className={`px-3 py-1 rounded-lg font-medium transition-colors ${
-                selectedTime === '90d' ? 'bg-cyan-500/20 text-cyan-300 font-semibold' : 'text-slate-400 hover:text-white'
+                selectedTime === '90d' ? 'bg-cyan-500/20 text-cyan-300 font-semibold' : 'text-slate-400 hover:text-slate-50'
               }`}
             >
               90D
@@ -139,7 +139,7 @@ export const RiskAnalyticsPage: React.FC = () => {
 
       {/* Top 4 Risk Vector Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Authentication Risk</span>
           <div className="text-2xl font-bold text-cyan-400 font-mono mt-1">24.2 / 100</div>
           <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono mt-1">
@@ -148,7 +148,7 @@ export const RiskAnalyticsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Device Posture Risk</span>
           <div className="text-2xl font-bold text-amber-400 font-mono mt-1">36.8 / 100</div>
           <div className="flex items-center gap-1 text-[10px] text-rose-400 font-mono mt-1">
@@ -157,7 +157,7 @@ export const RiskAnalyticsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Location / Geo Risk</span>
           <div className="text-2xl font-bold text-emerald-400 font-mono mt-1">14.1 / 100</div>
           <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono mt-1">
@@ -165,7 +165,7 @@ export const RiskAnalyticsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Privileged Escalation</span>
           <div className="text-2xl font-bold text-rose-400 font-mono mt-1">52.4 / 100</div>
           <div className="flex items-center gap-1 text-[10px] text-amber-300 font-mono mt-1">
@@ -177,10 +177,10 @@ export const RiskAnalyticsPage: React.FC = () => {
       {/* Row 1: Line Chart (Risk Trend) & Category Bars */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Risk Trend Chart */}
-        <div className="lg:col-span-7 p-5 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="lg:col-span-7 p-5 rounded-xl panel">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-white">Aggregated Risk Score Trend</h3>
+              <h3 className="text-sm font-bold text-slate-50">Aggregated Risk Score Trend</h3>
               <p className="text-xs text-slate-400 mt-0.5">Rolling 7-day posture score vs critical threat telemetry.</p>
             </div>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
@@ -191,13 +191,13 @@ export const RiskAnalyticsPage: React.FC = () => {
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="date" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--n-800)" vertical={false} />
+                <XAxis dataKey="date" stroke="var(--n-400)" fontSize={11} tickLine={false} />
+                <YAxis stroke="var(--n-400)" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0b1019',
-                    borderColor: '#334155',
+                    backgroundColor: 'var(--n-900)',
+                    borderColor: 'var(--n-700)',
                     borderRadius: '8px',
                     fontSize: '12px',
                   }}
@@ -205,15 +205,15 @@ export const RiskAnalyticsPage: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="score"
-                  stroke="#06b6d4"
+                  stroke="var(--a-sig-400)"
                   strokeWidth={2.5}
-                  dot={{ r: 4, fill: '#06b6d4' }}
+                  dot={{ r: 4, fill: 'var(--a-sig-400)' }}
                   name="Risk Index"
                 />
                 <Line
                   type="monotone"
                   dataKey="authRisk"
-                  stroke="#f59e0b"
+                  stroke="var(--a-ochre-400)"
                   strokeWidth={2}
                   strokeDasharray="4 4"
                   name="Auth Friction"
@@ -224,9 +224,9 @@ export const RiskAnalyticsPage: React.FC = () => {
         </div>
 
         {/* Category Breakdown Bar Chart */}
-        <div className="lg:col-span-5 p-5 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="lg:col-span-5 p-5 rounded-xl panel">
           <div className="mb-4">
-            <h3 className="text-sm font-bold text-white">Risk Exposure by Vector</h3>
+            <h3 className="text-sm font-bold text-slate-50">Risk Exposure by Vector</h3>
             <p className="text-xs text-slate-400 mt-0.5">Heuristic risk index (0 = zero risk, 100 = critical threat).</p>
           </div>
 
@@ -237,20 +237,20 @@ export const RiskAnalyticsPage: React.FC = () => {
                 layout="vertical"
                 margin={{ top: 10, right: 20, left: 30, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-                <XAxis type="number" domain={[0, 100]} stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--n-800)" horizontal={false} />
+                <XAxis type="number" domain={[0, 100]} stroke="var(--n-400)" fontSize={11} tickLine={false} />
                 <YAxis
                   type="category"
                   dataKey="category"
-                  stroke="#94a3b8"
+                  stroke="var(--n-400)"
                   fontSize={11}
                   tickLine={false}
                   width={90}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0b1019',
-                    borderColor: '#334155',
+                    backgroundColor: 'var(--n-900)',
+                    borderColor: 'var(--n-700)',
                     borderRadius: '8px',
                     fontSize: '12px',
                   }}
@@ -269,10 +269,10 @@ export const RiskAnalyticsPage: React.FC = () => {
       {/* Row 2: Heatmap & Vector Donut */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Risk Heatmap Matrix */}
-        <div className="lg:col-span-8 p-5 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="lg:col-span-8 p-5 rounded-xl panel">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+              <h3 className="text-sm font-bold text-slate-50 flex items-center gap-1.5">
                 <Flame className="w-4 h-4 text-orange-400" />
                 <span>Temporal Risk Heatmap (Day × Hour)</span>
               </h3>
@@ -324,9 +324,9 @@ export const RiskAnalyticsPage: React.FC = () => {
         </div>
 
         {/* Vector Donut Chart */}
-        <div className="lg:col-span-4 p-5 rounded-xl bg-[#0d131f]/90 border border-slate-800 flex flex-col justify-between">
+        <div className="lg:col-span-4 p-5 rounded-xl panel flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-bold text-white">Threat Vector Distribution</h3>
+            <h3 className="text-sm font-bold text-slate-50">Threat Vector Distribution</h3>
             <p className="text-xs text-slate-400 mt-0.5">Most prevalent risk anomalies.</p>
 
             <div className="h-48 w-full mt-2">
@@ -347,8 +347,8 @@ export const RiskAnalyticsPage: React.FC = () => {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0b1019',
-                      borderColor: '#334155',
+                      backgroundColor: 'var(--n-900)',
+                      borderColor: 'var(--n-700)',
                       borderRadius: '8px',
                       fontSize: '12px',
                     }}
@@ -366,7 +366,7 @@ export const RiskAnalyticsPage: React.FC = () => {
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                   <span className="text-slate-300 text-[11px]">{item.name}</span>
                 </div>
-                <span className="font-mono text-white font-bold">{item.value}%</span>
+                <span className="font-mono text-slate-50 font-bold">{item.value}%</span>
               </div>
             ))}
           </div>

@@ -30,7 +30,7 @@ export const RbacPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Role-Based Access Control</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Role-Based Access Control</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               RBAC Governance
             </span>
@@ -47,7 +47,7 @@ export const RbacPage: React.FC = () => {
           <div
             key={`${role.id}-${idx}`}
             onClick={() => handleOpenRole(role)}
-            className="p-5 rounded-xl bg-[#0d131f]/90 border border-slate-800 hover:border-cyan-500/40 transition-all duration-200 cursor-pointer group flex flex-col justify-between shadow-lg hover:shadow-cyan-950/20"
+            className="p-5 rounded-xl panel lift duration-200 cursor-pointer group flex flex-col justify-between shadow-lg hover:"
           >
             <div>
               {/* Card top */}
@@ -56,7 +56,7 @@ export const RbacPage: React.FC = () => {
                   <span className="text-[10px] font-mono text-cyan-400 font-semibold uppercase tracking-wider">
                     {role.code}
                   </span>
-                  <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5">
+                  <h3 className="text-base font-bold text-slate-50 group-hover:text-cyan-300 transition-colors mt-0.5">
                     {role.name}
                   </h3>
                 </div>
@@ -71,7 +71,7 @@ export const RbacPage: React.FC = () => {
               <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-800/80">
                 <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-center">
                   <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Users</span>
-                  <span className="text-sm font-bold font-mono text-white mt-0.5 block">
+                  <span className="text-sm font-bold font-mono text-slate-50 mt-0.5 block">
                     {role.usersCount}
                   </span>
                 </div>

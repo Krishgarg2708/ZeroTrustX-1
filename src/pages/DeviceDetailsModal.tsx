@@ -77,7 +77,7 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
               <Laptop className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-white">{device.name}</h4>
+              <h4 className="text-sm font-bold text-slate-50">{device.name}</h4>
               <p className="text-slate-400 font-mono text-[11px] mt-0.5">
                 Cert Serial: {device.certSerial}
               </p>
@@ -96,12 +96,12 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              <span className="font-semibold text-white">Continuous Hardware Health Attestation</span>
+              <span className="font-semibold text-slate-50">Continuous Hardware Health Attestation</span>
             </div>
             <button
               onClick={handleRunAudit}
               disabled={isAuditing}
-              className="px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-md transition-all"
+              className="px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-50 font-semibold text-xs flex items-center gap-1.5 shadow-md transition-all"
             >
               <RotateCw className={`w-3.5 h-3.5 ${isAuditing ? 'animate-spin' : ''}`} />
               <span>{isAuditing ? 'Auditing...' : 'Run Live Posture Audit'}</span>
@@ -153,7 +153,7 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
             <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" /> EDR Agent Telemetry
             </span>
-            <div className="font-semibold text-white">{device.edrStatus}</div>
+            <div className="font-semibold text-slate-50">{device.edrStatus}</div>
           </div>
 
           {/* Encryption */}
@@ -169,7 +169,7 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
             <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5 text-cyan-400" /> OS Platform & Build
             </span>
-            <div className="font-mono text-white">{device.os}</div>
+            <div className="font-mono text-slate-50">{device.os}</div>
           </div>
 
           {/* Patch Status */}
@@ -177,7 +177,7 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
             <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-cyan-400" /> Security Patch Status
             </span>
-            <div className="font-semibold text-white">{device.patchStatus}</div>
+            <div className="font-semibold text-slate-50">{device.patchStatus}</div>
           </div>
 
           {/* Network & IP */}
@@ -193,7 +193,7 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
             <span className="text-slate-500 text-[11px] flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5 text-cyan-400" /> Geo Location
             </span>
-            <div className="text-white">{device.location}</div>
+            <div className="text-slate-50">{device.location}</div>
           </div>
         </div>
 
@@ -225,8 +225,8 @@ export const DeviceDetailsModal: React.FC<DeviceDetailsModalProps> = ({
             }}
             className={`w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
               isBlocked
-                ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-950/40'
-                : 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-950/40'
+                ? 'bg-emerald-600 hover:bg-emerald-500 text-slate-50 shadow-lg shadow-emerald-950/40'
+                : 'bg-rose-600 hover:bg-rose-500 text-slate-50 shadow-lg shadow-rose-950/40'
             }`}
           >
             {isBlocked ? (

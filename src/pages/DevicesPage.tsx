@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useSecurity } from '../context/SecurityContext';
+import { PinButton } from '../components/common/PinButton';
 import { Device } from '../types';
 import { StatusBadge, RiskScoreBadge } from '../components/common/StatusBadge';
 import { DeviceDetailsModal } from './DeviceDetailsModal';
@@ -52,7 +53,7 @@ export const DevicesPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Device Trust & Inventory</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Device Trust & Inventory</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               Endpoint Posture
             </span>
@@ -65,22 +66,22 @@ export const DevicesPage: React.FC = () => {
 
       {/* 4 Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Trusted Devices</span>
           <div className="text-2xl font-bold text-emerald-400 font-mono mt-1">1,842</div>
           <span className="text-[10px] text-slate-400 font-mono">+5.2% verified compliant</span>
         </div>
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Unknown Devices</span>
           <div className="text-2xl font-bold text-cyan-400 font-mono mt-1">64</div>
           <span className="text-[10px] text-slate-400 font-mono">Pending enrollment cert</span>
         </div>
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">At Risk Endpoints</span>
           <div className="text-2xl font-bold text-amber-400 font-mono mt-1">39</div>
           <span className="text-[10px] text-amber-300/80 font-mono">Missing EDR or patches</span>
         </div>
-        <div className="p-4 rounded-xl bg-[#0d131f]/90 border border-slate-800">
+        <div className="p-4 rounded-xl panel">
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">Blocked Devices</span>
           <div className="text-2xl font-bold text-rose-400 font-mono mt-1">17</div>
           <span className="text-[10px] text-rose-300/80 font-mono">Quarantined from network</span>
@@ -96,7 +97,7 @@ export const DevicesPage: React.FC = () => {
             placeholder="Search device name, user, OS, location..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-50 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -108,7 +109,7 @@ export const DevicesPage: React.FC = () => {
               className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-colors shrink-0 ${
                 statusFilter === status
                   ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30'
-                  : 'text-slate-400 hover:text-white bg-slate-950/60'
+                  : 'text-slate-400 hover:text-slate-50 bg-slate-950/60'
               }`}
             >
               {status.replace(/_/g, ' ')}
@@ -118,7 +119,7 @@ export const DevicesPage: React.FC = () => {
       </div>
 
       {/* Devices Table */}
-      <div className="rounded-xl border border-slate-800 bg-[#0d131f]/90 overflow-hidden shadow-xl">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[11px] font-mono border-b border-slate-800">
@@ -141,36 +142,37 @@ export const DevicesPage: React.FC = () => {
                   onClick={() => handleOpenDetails(d)}
                   className="hover:bg-slate-900/50 transition-colors group cursor-pointer"
                 >
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <div className="flex items-center gap-2.5">
                       <div className="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">
                         <Laptop className="w-4 h-4 text-cyan-400" />
                       </div>
                       <div>
-                        <div className="font-semibold text-white group-hover:text-cyan-300">
-                          {d.name}
+                        <div className="font-semibold text-slate-50 group-hover:text-cyan-300 flex items-center gap-1.5">
+                          <span>{d.name}</span>
+                          <PinButton entry={{ id: `device:${d.id}`, kind: 'device', label: d.name }} />
                         </div>
                         <div className="text-[10px] text-slate-500 font-mono">{d.id}</div>
                       </div>
                     </div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <div className="font-medium text-slate-200">{d.userName}</div>
                     <div className="text-[11px] text-slate-400">{d.userEmail}</div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap font-mono text-slate-300">
+                  <td className="px-4 density-row whitespace-nowrap font-mono text-slate-300">
                     {d.os}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap text-slate-300">
+                  <td className="px-4 density-row whitespace-nowrap text-slate-300">
                     {d.location}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-white text-xs">{d.trustScore}%</span>
+                      <span className="font-mono font-bold text-slate-50 text-xs">{d.trustScore}%</span>
                       <div className="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
                         <div
                           className={`h-full ${
@@ -186,15 +188,15 @@ export const DevicesPage: React.FC = () => {
                     </div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap text-slate-300 font-mono text-[11px]">
+                  <td className="px-4 density-row whitespace-nowrap text-slate-300 font-mono text-[11px]">
                     {d.edrStatus}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap font-mono text-slate-400 text-[11px]">
+                  <td className="px-4 density-row whitespace-nowrap font-mono text-slate-400 text-[11px]">
                     {d.lastSeen}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <StatusBadge status={d.trustStatus} size="sm" />
                   </td>
 

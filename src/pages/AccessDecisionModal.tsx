@@ -69,7 +69,7 @@ export const AccessDecisionModal: React.FC<AccessDecisionModalProps> = ({
                 {request.userName.charAt(0)}
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">{request.userName}</h4>
+                <h4 className="text-sm font-bold text-slate-50">{request.userName}</h4>
                 <p className="text-slate-400">{request.userEmail}</p>
               </div>
             </div>
@@ -242,21 +242,21 @@ export const AccessDecisionModal: React.FC<AccessDecisionModalProps> = ({
           <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
             <button
               onClick={handleApprove}
-              className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/40 transition-colors"
+              className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-50 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/40 transition-colors"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>Allow Access</span>
             </button>
             <button
               onClick={handleChallenge}
-              className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-amber-950/40 transition-colors"
+              className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-50 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-amber-950/40 transition-colors"
             >
               <AlertTriangle className="w-4 h-4" />
               <span>Require Step-Up MFA</span>
             </button>
             <button
               onClick={handleDeny}
-              className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-rose-950/40 transition-colors"
+              className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-slate-50 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-rose-950/40 transition-colors"
             >
               <XCircle className="w-4 h-4" />
               <span>Deny Access</span>
@@ -264,7 +264,7 @@ export const AccessDecisionModal: React.FC<AccessDecisionModalProps> = ({
           </div>
         ) : (
           <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-center text-slate-400">
-            This request has already been finalized as <span className="text-white font-bold">{request.status.toUpperCase()}</span>.
+            This request has already been finalized as <span className="text-slate-50 font-bold">{request.status.toUpperCase()}</span>.
           </div>
         )}
       </div>

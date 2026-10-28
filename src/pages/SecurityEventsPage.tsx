@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useSecurity } from '../context/SecurityContext';
+import { exportRows, ExportFormat } from '../utils/exportData';
+import { ExportButtons } from '../components/common/ExportButtons';
 import { SecurityEvent, RiskLevel } from '../types';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { EventDetailsDrawer } from './EventDetailsDrawer';
@@ -16,7 +18,7 @@ import {
 } from 'lucide-react';
 
 export const SecurityEventsPage: React.FC = () => {
-  const { securityEvents } = useSecurity();
+  const { securityEvents, addToast } = useSecurity();
   const [searchQuery, setSearchQuery] = useState('');
   const [severityFilter, setSeverityFilter] = useState<'all' | RiskLevel>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
@@ -39,6 +41,19 @@ export const SecurityEventsPage: React.FC = () => {
     });
   }, [securityEvents, searchQuery, severityFilter, typeFilter]);
 
+  const handleExport = (format: ExportFormat) => {
+    if (filteredEvents.length === 0) {
+      addToast('Nothing to export', 'No events match the current filters.', 'warning');
+      return;
+    }
+    const name = exportRows(filteredEvents as unknown as Record<string, unknown>[], {
+      filename: 'zerotrustx-security-events',
+      format,
+      meta: { filters: { search: searchQuery, severity: severityFilter, type: typeFilter } },
+    });
+    addToast('Events exported', `${filteredEvents.length} events written to ${name}`, 'success');
+  };
+
   const handleOpenEvent = (evt: SecurityEvent) => {
     setSelectedEvent(evt);
     setIsDrawerOpen(true);
@@ -50,7 +65,7 @@ export const SecurityEventsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-white tracking-tight">Security Events</h1>
+            <h1 className="text-2xl font-bold text-slate-50 tracking-tight">Security Events</h1>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
               SOC SIEM Ingestion
             </span>
@@ -64,6 +79,7 @@ export const SecurityEventsPage: React.FC = () => {
           <span className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 font-mono">
             {filteredEvents.length} events logged
           </span>
+          <ExportButtons onExport={handleExport} />
         </div>
       </div>
 
@@ -76,7 +92,7 @@ export const SecurityEventsPage: React.FC = () => {
             placeholder="Search event, user, IP, or payload..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-50 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
@@ -90,7 +106,7 @@ export const SecurityEventsPage: React.FC = () => {
               className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-colors shrink-0 ${
                 severityFilter === sev
                   ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30'
-                  : 'text-slate-400 hover:text-white bg-slate-950/60'
+                  : 'text-slate-400 hover:text-slate-50 bg-slate-950/60'
               }`}
             >
               {sev}
@@ -100,7 +116,7 @@ export const SecurityEventsPage: React.FC = () => {
       </div>
 
       {/* Events Table */}
-      <div className="rounded-xl border border-slate-800 bg-[#0d131f]/90 overflow-hidden shadow-xl">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-[11px] font-mono border-b border-slate-800">
@@ -123,48 +139,48 @@ export const SecurityEventsPage: React.FC = () => {
                   onClick={() => handleOpenEvent(evt)}
                   className="hover:bg-slate-900/50 transition-colors group cursor-pointer"
                 >
-                  <td className="px-4 py-3.5 whitespace-nowrap font-mono text-slate-400 text-[11px]">
+                  <td className="px-4 density-row whitespace-nowrap font-mono text-slate-400 text-[11px]">
                     {evt.timestamp}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <StatusBadge status={evt.severity} size="sm" />
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
-                    <div className="font-semibold text-white group-hover:text-cyan-300">
+                  <td className="px-4 density-row whitespace-nowrap">
+                    <div className="font-semibold text-slate-50 group-hover:text-cyan-300">
                       {evt.eventType}
                     </div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <div className="font-medium text-slate-200">{evt.user}</div>
                     <div className="text-[10px] text-slate-500">{evt.userEmail}</div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap font-mono text-cyan-300 text-[11px]">
+                  <td className="px-4 density-row whitespace-nowrap font-mono text-cyan-300 text-[11px]">
                     {evt.ip}
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap text-slate-300">
+                  <td className="px-4 density-row whitespace-nowrap text-slate-300">
                     <div className="flex items-center gap-1.5">
                       <Laptop className="w-3.5 h-3.5 text-slate-400" />
                       <span className="truncate max-w-[140px]">{evt.device}</span>
                     </div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap text-slate-300">
+                  <td className="px-4 density-row whitespace-nowrap text-slate-300">
                     <div className="flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-slate-500" />
                       <span>{evt.location}</span>
                     </div>
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap">
+                  <td className="px-4 density-row whitespace-nowrap">
                     <StatusBadge status={evt.action} size="sm" />
                   </td>
 
-                  <td className="px-4 py-3.5 whitespace-nowrap text-right">
+                  <td className="px-4 density-row whitespace-nowrap text-right">
                     <button
                       onClick={() => handleOpenEvent(evt)}
                       className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-700 text-xs font-medium inline-flex items-center gap-1"
