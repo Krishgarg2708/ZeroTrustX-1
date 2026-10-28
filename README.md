@@ -8,6 +8,8 @@
 
 Unlike traditional security systems that often trust users after a successful login, ZeroTrustX follows a **continuous verification and least-privilege approach**. Every access request is evaluated before access is granted.
 
+> **v5.0:** redesigned UI, cursor trail, command palette, containment mode and more — see [CHANGES.md](CHANGES.md).
+
 ---
 
 ## 🚨 Problem Statement
