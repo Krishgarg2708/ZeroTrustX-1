@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SecurityProvider, useSecurity } from './context/SecurityContext';
+import { UiProvider, useUi } from './context/UiContext';
 import { Sidebar } from './components/layout/Sidebar';
 import { Topbar } from './components/layout/Topbar';
 import { ToastContainer } from './components/common/ToastContainer';
@@ -9,6 +10,11 @@ import { ArchitectureFlowModal } from './components/common/ArchitectureFlowModal
 import { LiveSessionsModal } from './components/common/LiveSessionsModal';
 import { GuidedTourModal } from './components/common/GuidedTourModal';
 import { SplashScreen } from './components/common/SplashScreen';
+import { CursorTrail } from './components/common/CursorTrail';
+import { ShortcutLayer } from './components/common/ShortcutLayer';
+import { ShortcutHelp } from './components/common/ShortcutHelp';
+import { LockdownModal } from './components/common/LockdownModal';
+import { LockdownBanner } from './components/common/LockdownBanner';
 // Pages
 import { DashboardPage } from './pages/DashboardPage';
 import { UsersPage } from './pages/UsersPage';
@@ -26,12 +32,21 @@ import { AiCopilotPage } from './pages/AiCopilotPage';
 
 const MainAppContent: React.FC = () => {
   const { isAuthenticated } = useSecurity();
+  const { cursorEnabled, lockdown } = useUi();
   const [currentPage, setCurrentPage] = useState<string>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLockdownOpen, setIsLockdownOpen] = useState(false);
 
-  // If not logged in, show enterprise login screen
+  const openLockdown = useCallback(() => setIsLockdownOpen(true), []);
+
   if (!isAuthenticated) {
-    return <LoginPage />;
+    return (
+      <>
+        <LoginPage />
+        <CursorTrail enabled={cursorEnabled} />
+        <ToastContainer />
+      </>
+    );
   }
 
   const renderCurrentPage = () => {
@@ -66,16 +81,14 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#080B11] text-slate-100 antialiased font-sans">
-      {/* Mobile Drawer Backdrop */}
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-950 text-slate-200 antialiased font-sans">
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/80 z-20 md:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-slate-950/80 z-20 md:hidden backdrop-blur-sm"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
-      {/* Desktop & Mobile Responsive Sidebar */}
       <div
         className={`${
           isMobileMenuOpen ? 'fixed inset-y-0 left-0 z-30' : 'hidden'
@@ -87,29 +100,41 @@ const MainAppContent: React.FC = () => {
             setCurrentPage(page);
             setIsMobileMenuOpen(false);
           }}
+          onRequestLockdown={openLockdown}
         />
       </div>
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <Topbar
           onNavigate={setCurrentPage}
           onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onRequestLockdown={openLockdown}
         />
 
-        {/* Scrollable Page Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 cyber-dots">
-          <div className="max-w-7xl mx-auto">{renderCurrentPage()}</div>
+        {lockdown && <LockdownBanner onReview={openLockdown} />}
+
+        <main className="flex-1 overflow-y-auto app-surface">
+          <div className="p-4 sm:p-6 lg:p-8">
+            {/* Keying on the page id replays the entrance animation on every
+                navigation, which gives the single-page app a sense of place. */}
+            <div key={currentPage} className="max-w-7xl mx-auto fade-up">
+              {renderCurrentPage()}
+            </div>
+          </div>
         </main>
       </div>
 
-      {/* Global Modals & Notifications */}
-      <CommandPalette onNavigate={setCurrentPage} />
+      {/* Global layers */}
+      <CommandPalette onNavigate={setCurrentPage} onRequestLockdown={openLockdown} />
       <AccessSimulatorModal />
       <ArchitectureFlowModal />
       <LiveSessionsModal />
       <GuidedTourModal onNavigate={setCurrentPage} />
+      <ShortcutHelp />
+      <LockdownModal isOpen={isLockdownOpen} onClose={() => setIsLockdownOpen(false)} />
+      <ShortcutLayer onNavigate={setCurrentPage} onRequestLockdown={openLockdown} />
       <ToastContainer />
+      <CursorTrail enabled={cursorEnabled} />
     </div>
   );
 };
@@ -118,9 +143,11 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true);
 
   return (
-    <SecurityProvider>
-      <MainAppContent />
-      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
-    </SecurityProvider>
+    <UiProvider>
+      <SecurityProvider>
+        <MainAppContent />
+        {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+      </SecurityProvider>
+    </UiProvider>
   );
 }

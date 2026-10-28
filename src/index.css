@@ -1,173 +1,911 @@
 @import "tailwindcss";
 
+/* =========================================================================
+   ZeroTrustX — "Graphite & Signal"
+   -------------------------------------------------------------------------
+   A deliberately un-neon design system for a security console.
+
+   Everything is driven by two small sets of variables:
+     --n-*    the warm graphite neutral ramp (surfaces, text, hairlines)
+     --a-*    the accent ramps (signal / moss / ochre / brick / plum)
+
+   Tailwind's default palette names are re-pointed at those variables with
+   `@theme inline`, which keeps the utility output as `var(--n-900)` rather
+   than a baked hex. That is the whole trick: redefining the ramp under
+   `[data-theme="light"]` repaints the entire application at runtime, with
+   no class rewriting and no second stylesheet.
+
+   Reading the ramp: higher number == darker in dark mode, and the light
+   ramp is inverted, so `bg-slate-950` is "the furthest back surface" and
+   `text-slate-200` is "primary text" in both themes.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- DARK --- */
+:root {
+  color-scheme: dark;
+
+  /* Warm graphite. Brown-biased rather than blue-biased — this is the
+     single change that does the most to kill the "cyber template" read. */
+  --n-50:  #faf8f5;
+  --n-100: #f1ede7;
+  --n-200: #ded9d1;
+  --n-300: #bbb5ab;
+  --n-400: #8e887d;
+  --n-500: #6d665d;
+  --n-600: #514b44;
+  --n-700: #393430;
+  --n-800: #292521;
+  --n-900: #1c1917;
+  --n-950: #141211;
+  --n-1000: #0e0d0c;
+
+  /* Signal — oxidised copper / verdigris. Calm, instrument-panel teal. */
+  --a-sig-100: #dcebe6;
+  --a-sig-200: #bfdbd2;
+  --a-sig-300: #9cc4b8;
+  --a-sig-400: #76a697;
+  --a-sig-500: #578a7a;
+  --a-sig-600: #436e61;
+  --a-sig-700: #33554b;
+  --a-sig-800: #253f38;
+  --a-sig-900: #1a2d28;
+  --a-sig-950: #12201d;
+
+  /* Moss — healthy / allowed. Pushed yellow-green so it never reads as
+     the same hue as Signal when the two sit side by side. */
+  --a-moss-100: #e4ecd9;
+  --a-moss-200: #cbdcb9;
+  --a-moss-300: #abc595;
+  --a-moss-400: #89a872;
+  --a-moss-500: #6d8c57;
+  --a-moss-600: #567044;
+  --a-moss-700: #425636;
+  --a-moss-800: #2f3e27;
+  --a-moss-900: #222d1c;
+  --a-moss-950: #171f13;
+
+  /* Ochre — warning. A pigment, not a highlighter. */
+  --a-ochre-100: #f6ecd6;
+  --a-ochre-200: #ecd9ae;
+  --a-ochre-300: #ddbe80;
+  --a-ochre-400: #c9a05a;
+  --a-ochre-500: #b08444;
+  --a-ochre-600: #8f6936;
+  --a-ochre-700: #6d502a;
+  --a-ochre-800: #4d391e;
+  --a-ochre-900: #372815;
+  --a-ochre-950: #251b0e;
+
+  /* Brick — critical. Oxblood, closer to a wax seal than an alarm LED. */
+  --a-brick-100: #f7e3df;
+  --a-brick-200: #eec6bf;
+  --a-brick-300: #dfa298;
+  --a-brick-400: #cb7c71;
+  --a-brick-500: #b25a50;
+  --a-brick-600: #934640;
+  --a-brick-700: #713632;
+  --a-brick-800: #502725;
+  --a-brick-900: #3a1c1a;
+  --a-brick-950: #271311;
+
+  /* Plum — informational / AI. Dusty, low-chroma. */
+  --a-plum-100: #e8e4ee;
+  --a-plum-200: #d2cbdf;
+  --a-plum-300: #b4abc9;
+  --a-plum-400: #9389b0;
+  --a-plum-500: #776c95;
+  --a-plum-600: #5f5579;
+  --a-plum-700: #4a425d;
+  --a-plum-800: #352f43;
+  --a-plum-900: #262231;
+  --a-plum-950: #1a1722;
+
+  /* Elevation. Real light, warm-tinted, directional — never a halo. */
+  --e-1: 0 1px 2px -1px rgb(0 0 0 / 0.55), 0 1px 1px rgb(0 0 0 / 0.3);
+  --e-2: 0 2px 4px -2px rgb(0 0 0 / 0.5), 0 4px 12px -4px rgb(0 0 0 / 0.45);
+  --e-3: 0 8px 24px -8px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  --e-4: 0 24px 56px -16px rgb(0 0 0 / 0.7), 0 4px 12px -4px rgb(0 0 0 / 0.5);
+
+  /* A 1px inner top highlight. Gives panels a milled-metal edge instead
+     of the flat "div with a border" look. */
+  --edge-top: inset 0 1px 0 0 rgb(255 255 255 / 0.04);
+  --edge-ring: inset 0 0 0 1px rgb(255 255 255 / 0.025);
+
+  --grain-opacity: 0.04;
+  --paper-wash: none;
+
+  /* Density — driven by the Comfortable/Compact control in Settings. */
+  --density-row: 0.875rem;
+  --density-cell: 0.75rem;
+  --density-scale: 1;
+}
+
+/* --------------------------------------------------------------- LIGHT --- */
+/* The neutral ramp inverts. Warm paper rather than #fff, so the whole UI
+   keeps the same temperature in both themes. */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --n-50:  #1a1714;
+  --n-100: #221e1a;
+  --n-200: #2e2924;
+  --n-300: #4b443c;
+  --n-400: #6f6759;
+  --n-500: #8d8476;
+  --n-600: #aaa196;
+  --n-700: #cec7bb;
+  --n-800: #e3ddd2;
+  --n-900: #f2eee7;
+  --n-950: #faf7f1;
+  --n-1000: #fffdf9;
+
+  /* Accents darken and gain a little chroma so they hold contrast on paper. */
+  --a-sig-100: #11201c;
+  --a-sig-200: #162b25;
+  --a-sig-300: #1f3d34;
+  --a-sig-400: #2b5447;
+  --a-sig-500: #3a6b5b;
+  --a-sig-600: #4a8471;
+  --a-sig-700: #74a695;
+  --a-sig-800: #b4d0c6;
+  --a-sig-900: #d9e8e2;
+  --a-sig-950: #ecf4f1;
+
+  --a-moss-100: #182013;
+  --a-moss-200: #1f2b19;
+  --a-moss-300: #2c3c23;
+  --a-moss-400: #3e5431;
+  --a-moss-500: #526d41;
+  --a-moss-600: #688655;
+  --a-moss-700: #93ab80;
+  --a-moss-800: #c6d6b6;
+  --a-moss-900: #e2ebd7;
+  --a-moss-950: #f0f5ea;
+
+  --a-ochre-100: #251b0e;
+  --a-ochre-200: #352512;
+  --a-ochre-300: #4d361a;
+  --a-ochre-400: #6b4b24;
+  --a-ochre-500: #8a6230;
+  --a-ochre-600: #a87a3d;
+  --a-ochre-700: #c9a469;
+  --a-ochre-800: #e8d4ae;
+  --a-ochre-900: #f5e9d2;
+  --a-ochre-950: #fbf4e7;
+
+  --a-brick-100: #271311;
+  --a-brick-200: #381a17;
+  --a-brick-300: #4e2621;
+  --a-brick-400: #6d352e;
+  --a-brick-500: #8c463d;
+  --a-brick-600: #a85a50;
+  --a-brick-700: #c88b82;
+  --a-brick-800: #e9c4bd;
+  --a-brick-900: #f5e0db;
+  --a-brick-950: #fbeeeb;
+
+  --a-plum-100: #1a1722;
+  --a-plum-200: #262131;
+  --a-plum-300: #372f45;
+  --a-plum-400: #4d435f;
+  --a-plum-500: #64587b;
+  --a-plum-600: #7e7196;
+  --a-plum-700: #a79cbb;
+  --a-plum-800: #d3ccdf;
+  --a-plum-900: #e8e4ee;
+  --a-plum-950: #f3f1f7;
+
+  --e-1: 0 1px 2px -1px rgb(60 48 32 / 0.14), 0 1px 1px rgb(60 48 32 / 0.06);
+  --e-2: 0 2px 4px -2px rgb(60 48 32 / 0.12), 0 6px 16px -6px rgb(60 48 32 / 0.14);
+  --e-3: 0 10px 28px -10px rgb(60 48 32 / 0.18), 0 2px 6px -2px rgb(60 48 32 / 0.1);
+  --e-4: 0 26px 60px -20px rgb(60 48 32 / 0.26), 0 6px 14px -6px rgb(60 48 32 / 0.12);
+
+  --edge-top: inset 0 1px 0 0 rgb(255 255 255 / 0.9);
+  --edge-ring: inset 0 0 0 1px rgb(60 48 32 / 0.03);
+
+  --grain-opacity: 0.025;
+  /* A faint warm wash across the page so large light areas aren't dead flat. */
+  --paper-wash: radial-gradient(
+      120% 90% at 12% -10%,
+      rgb(193 160 106 / 0.1),
+      transparent 60%
+    ),
+    radial-gradient(90% 70% at 100% 0%, rgb(120 150 140 / 0.08), transparent 55%);
+}
+
+/* ------------------------------------------------- TAILWIND REMAPPING --- */
+/* `inline` keeps utilities pointed at the variables above instead of
+   compiling a hex in, which is what makes the runtime theme flip work. */
+@theme inline {
+  --font-sans: "Inter Tight", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", "Iowan Old Style", "Palatino Linotype",
+    Palatino, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo,
+    Consolas, monospace;
+
+  /* Neutral ramp -> slate/gray/zinc/neutral/stone (every neutral alias the
+     codebase reaches for lands on the same warm graphite). */
+  --color-slate-50: var(--n-50);
+  --color-slate-100: var(--n-100);
+  --color-slate-200: var(--n-200);
+  --color-slate-300: var(--n-300);
+  --color-slate-400: var(--n-400);
+  --color-slate-500: var(--n-500);
+  --color-slate-600: var(--n-600);
+  --color-slate-700: var(--n-700);
+  --color-slate-800: var(--n-800);
+  --color-slate-900: var(--n-900);
+  --color-slate-950: var(--n-950);
+
+  --color-gray-50: var(--n-50);
+  --color-gray-100: var(--n-100);
+  --color-gray-200: var(--n-200);
+  --color-gray-300: var(--n-300);
+  --color-gray-400: var(--n-400);
+  --color-gray-500: var(--n-500);
+  --color-gray-600: var(--n-600);
+  --color-gray-700: var(--n-700);
+  --color-gray-800: var(--n-800);
+  --color-gray-900: var(--n-900);
+  --color-gray-950: var(--n-950);
+
+  --color-zinc-400: var(--n-400);
+  --color-zinc-500: var(--n-500);
+  --color-zinc-700: var(--n-700);
+  --color-zinc-800: var(--n-800);
+  --color-zinc-900: var(--n-900);
+  --color-zinc-950: var(--n-950);
+
+  --color-neutral-400: var(--n-400);
+  --color-neutral-700: var(--n-700);
+  --color-neutral-800: var(--n-800);
+  --color-neutral-900: var(--n-900);
+  --color-neutral-950: var(--n-950);
+
+  /* Signal ramp -> cyan / sky / blue / teal. The old palette used all four
+     interchangeably for "primary"; now they genuinely are one colour. */
+  --color-cyan-50: var(--a-sig-100);
+  --color-cyan-100: var(--a-sig-100);
+  --color-cyan-200: var(--a-sig-200);
+  --color-cyan-300: var(--a-sig-300);
+  --color-cyan-400: var(--a-sig-400);
+  --color-cyan-500: var(--a-sig-500);
+  --color-cyan-600: var(--a-sig-600);
+  --color-cyan-700: var(--a-sig-700);
+  --color-cyan-800: var(--a-sig-800);
+  --color-cyan-900: var(--a-sig-900);
+  --color-cyan-950: var(--a-sig-950);
+
+  --color-sky-300: var(--a-sig-300);
+  --color-sky-400: var(--a-sig-400);
+  --color-sky-500: var(--a-sig-500);
+  --color-sky-600: var(--a-sig-600);
+  --color-sky-900: var(--a-sig-900);
+  --color-sky-950: var(--a-sig-950);
+
+  --color-blue-300: var(--a-sig-300);
+  --color-blue-400: var(--a-sig-400);
+  --color-blue-500: var(--a-sig-500);
+  --color-blue-600: var(--a-sig-600);
+  --color-blue-700: var(--a-sig-700);
+  --color-blue-800: var(--a-sig-800);
+  --color-blue-900: var(--a-sig-900);
+  --color-blue-950: var(--a-sig-950);
+
+  --color-teal-300: var(--a-sig-300);
+  --color-teal-400: var(--a-sig-400);
+  --color-teal-500: var(--a-sig-500);
+  --color-teal-600: var(--a-sig-600);
+
+  /* Moss ramp -> emerald / green / lime */
+  --color-emerald-100: var(--a-moss-100);
+  --color-emerald-200: var(--a-moss-200);
+  --color-emerald-300: var(--a-moss-300);
+  --color-emerald-400: var(--a-moss-400);
+  --color-emerald-500: var(--a-moss-500);
+  --color-emerald-600: var(--a-moss-600);
+  --color-emerald-700: var(--a-moss-700);
+  --color-emerald-800: var(--a-moss-800);
+  --color-emerald-900: var(--a-moss-900);
+  --color-emerald-950: var(--a-moss-950);
+
+  --color-green-300: var(--a-moss-300);
+  --color-green-400: var(--a-moss-400);
+  --color-green-500: var(--a-moss-500);
+  --color-green-600: var(--a-moss-600);
+  --color-green-900: var(--a-moss-900);
+
+  --color-lime-300: var(--a-moss-300);
+  --color-lime-400: var(--a-moss-400);
+  --color-lime-500: var(--a-moss-500);
+
+  /* Ochre ramp -> amber / yellow / orange */
+  --color-amber-100: var(--a-ochre-100);
+  --color-amber-200: var(--a-ochre-200);
+  --color-amber-300: var(--a-ochre-300);
+  --color-amber-400: var(--a-ochre-400);
+  --color-amber-500: var(--a-ochre-500);
+  --color-amber-600: var(--a-ochre-600);
+  --color-amber-700: var(--a-ochre-700);
+  --color-amber-800: var(--a-ochre-800);
+  --color-amber-900: var(--a-ochre-900);
+  --color-amber-950: var(--a-ochre-950);
+
+  --color-yellow-300: var(--a-ochre-300);
+  --color-yellow-400: var(--a-ochre-400);
+  --color-yellow-500: var(--a-ochre-500);
+
+  --color-orange-200: var(--a-ochre-200);
+  --color-orange-300: var(--a-ochre-300);
+  --color-orange-400: var(--a-ochre-400);
+  --color-orange-500: var(--a-ochre-500);
+  --color-orange-600: var(--a-ochre-600);
+  --color-orange-800: var(--a-ochre-800);
+  --color-orange-900: var(--a-ochre-900);
+
+  /* Brick ramp -> rose / red / pink */
+  --color-rose-100: var(--a-brick-100);
+  --color-rose-200: var(--a-brick-200);
+  --color-rose-300: var(--a-brick-300);
+  --color-rose-400: var(--a-brick-400);
+  --color-rose-500: var(--a-brick-500);
+  --color-rose-600: var(--a-brick-600);
+  --color-rose-700: var(--a-brick-700);
+  --color-rose-800: var(--a-brick-800);
+  --color-rose-900: var(--a-brick-900);
+  --color-rose-950: var(--a-brick-950);
+
+  --color-red-300: var(--a-brick-300);
+  --color-red-400: var(--a-brick-400);
+  --color-red-500: var(--a-brick-500);
+  --color-red-600: var(--a-brick-600);
+  --color-red-900: var(--a-brick-900);
+
+  --color-pink-400: var(--a-brick-400);
+  --color-pink-500: var(--a-brick-500);
+
+  /* Plum ramp -> indigo / violet / purple / fuchsia */
+  --color-indigo-100: var(--a-plum-100);
+  --color-indigo-200: var(--a-plum-200);
+  --color-indigo-300: var(--a-plum-300);
+  --color-indigo-400: var(--a-plum-400);
+  --color-indigo-500: var(--a-plum-500);
+  --color-indigo-600: var(--a-plum-600);
+  --color-indigo-700: var(--a-plum-700);
+  --color-indigo-800: var(--a-plum-800);
+  --color-indigo-900: var(--a-plum-900);
+  --color-indigo-950: var(--a-plum-950);
+
+  --color-violet-300: var(--a-plum-300);
+  --color-violet-400: var(--a-plum-400);
+  --color-violet-500: var(--a-plum-500);
+
+  --color-purple-300: var(--a-plum-300);
+  --color-purple-400: var(--a-plum-400);
+  --color-purple-500: var(--a-plum-500);
+  --color-purple-900: var(--a-plum-900);
+
+  --color-fuchsia-400: var(--a-plum-400);
+  --color-fuchsia-500: var(--a-plum-500);
+
+  /* Shadow scale -> real elevation */
+  --shadow-sm: var(--e-1);
+  --shadow-md: var(--e-2);
+  --shadow-lg: var(--e-3);
+  --shadow-xl: var(--e-3);
+  --shadow-2xl: var(--e-4);
+
+  /* Slightly tighter radii than the stock 0.75rem everything. */
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.625rem;
+  --radius-2xl: 0.875rem;
+}
+
+/* ------------------------------------------------------------- BASE --- */
 @layer base {
-  :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+  * {
+    border-color: var(--n-800);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #080B11;
-    color: #E2E8F0;
+    background-color: var(--n-950);
+    color: var(--n-200);
+    font-feature-settings: "cv05" 1, "ss03" 1;
+    letter-spacing: -0.006em;
+    transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  /* Tabular figures everywhere numbers are compared in a column. */
+  .font-mono,
+  code,
+  kbd,
+  pre,
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Headings carry the serif. This is the loudest "a person chose this"
+     signal in the whole system — a display serif next to a tight grotesk
+     is a decision no template makes. */
+  h1,
+  h2,
+  .display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--a-sig-500) 32%, transparent);
+    color: var(--n-50);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--a-sig-400);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+
+  /* Native select popups follow the theme instead of flashing white. */
+  select option {
+    background: var(--n-900);
+    color: var(--n-200);
   }
 }
 
-/* Custom dark scrollbar */
+/* -------------------------------------------------------- SCROLLBARS --- */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B1019;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 3px;
+  background: color-mix(in oklab, var(--n-500) 40%, transparent);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: color-mix(in oklab, var(--n-400) 60%, transparent);
+  background-clip: content-box;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--n-500) 45%, transparent) transparent;
 }
 
-/* Cyber grid background */
-.cyber-grid {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+/* ------------------------------------------------------- APP SURFACE --- */
+/* Replaces `.cyber-dots`: a woven paper tint rather than a glowing grid.
+   Two offset hairline grids at very low alpha read as texture, not as a
+   sci-fi overlay. */
+.app-surface {
+  position: relative;
+  background-image: var(--paper-wash);
 }
-
-.cyber-dots {
-  background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* Pulsing radar effect */
-@keyframes radar-sweep {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.animate-radar {
-  animation: radar-sweep 8s linear infinite;
-}
-
-/* ============ Splash / loading screen ============ */
-.splash-vignette {
-  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.75) 100%);
-  pointer-events: none;
-}
-
-@keyframes splash-spin { to { transform: rotate(360deg); } }
-.splash-spin-slow { animation: splash-spin 14s linear infinite; }
-.splash-spin-rev { animation: splash-spin 10s linear infinite reverse; }
-
-@keyframes splash-shield-glow {
-  0%, 100% { filter: drop-shadow(0 0 14px rgba(59,130,246,0.55)) drop-shadow(0 0 34px rgba(168,85,247,0.25)); }
-  50% { filter: drop-shadow(0 0 26px rgba(34,211,238,0.85)) drop-shadow(0 0 60px rgba(168,85,247,0.5)); }
-}
-.splash-shield { animation: splash-shield-glow 2.4s ease-in-out infinite; }
-.splash-shield-done { animation: splash-shield-done 0.9s ease-out forwards; }
-@keyframes splash-shield-done {
-  0% { filter: drop-shadow(0 0 20px rgba(34,211,238,0.8)); transform: scale(1); }
-  40% { filter: drop-shadow(0 0 50px rgba(52,211,153,1)) brightness(1.4); transform: scale(1.06); }
-  100% { filter: drop-shadow(0 0 30px rgba(52,211,153,0.7)); transform: scale(1.02); }
-}
-.splash-wordmark { filter: drop-shadow(0 0 18px rgba(59,130,246,0.35)); }
-
-/* Scan beam sweeping across the shield */
-.splash-scan {
-  position: absolute;
-  left: -8%;
-  right: -8%;
-  height: 2px;
-  top: 0;
-  background: linear-gradient(90deg, transparent, #67e8f9, #fff, #c084fc, transparent);
-  box-shadow: 0 0 18px 4px rgba(103, 232, 249, 0.7), 0 0 40px 10px rgba(168, 85, 247, 0.35);
-  animation: splash-scan 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  pointer-events: none;
-}
-@keyframes splash-scan {
-  0% { top: 4%; opacity: 0; }
-  12% { opacity: 1; }
-  88% { opacity: 1; }
-  100% { top: 96%; opacity: 0; }
-}
-
-/* Expanding shockwave rings */
-.splash-shock {
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  border-radius: 9999px;
-  border: 1.5px solid rgba(56, 189, 248, 0.55);
-  animation: splash-shock 2.2s ease-out infinite;
-  pointer-events: none;
-}
-@keyframes splash-shock {
-  0% { transform: scale(0.7); opacity: 0.8; }
-  100% { transform: scale(1.75); opacity: 0; }
-}
-
-/* Floating particles */
-.splash-particle {
-  position: absolute;
-  bottom: -10px;
-  width: 3px;
-  height: 3px;
-  border-radius: 9999px;
-  opacity: 0;
-  box-shadow: 0 0 8px currentColor;
-  animation-name: splash-rise;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-@keyframes splash-rise {
-  0% { transform: translateY(0) scale(0.6); opacity: 0; }
-  15% { opacity: 0.9; }
-  100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
-}
-
-/* Progress bar shine */
-.splash-bar-shine {
+.app-surface::before {
+  content: "";
   position: absolute;
   inset: 0;
-  width: 30%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-  animation: splash-shine 1.4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--n-500) 9%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--n-500) 9%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 88px 88px;
+  mask-image: radial-gradient(130% 100% at 50% 0%, #000 20%, transparent 78%);
 }
-@keyframes splash-shine {
-  from { transform: translateX(-120%); }
-  to { transform: translateX(420%); }
+.app-surface > * {
+  position: relative;
+  z-index: 1;
 }
 
-/* Animated ellipsis */
+/* Kept as aliases so any stray references still resolve to the new look. */
+.cyber-dots,
+.cyber-grid {
+  background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--n-500) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--n-500) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 88px 88px;
+}
+
+/* Film grain. One static noise tile at 2-4% — the thing that makes flat
+   dark UI feel like a material instead of a void. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer components {
+  /* ------------------------------------------------------------ PANELS --- */
+  /* `.panel` is the one card treatment. Hairline + top highlight + real
+     shadow. No coloured halo anywhere in the system. */
+  .panel {
+    background-color: var(--n-900);
+    border: 1px solid color-mix(in oklab, var(--n-700) 70%, transparent);
+    box-shadow: var(--e-1), var(--edge-top);
+  }
+  .panel-raised {
+    box-shadow: var(--e-2), var(--edge-top);
+  }
+  .panel-float {
+    background-color: var(--n-900);
+    border: 1px solid color-mix(in oklab, var(--n-700) 85%, transparent);
+    box-shadow: var(--e-4), var(--edge-top);
+  }
+
+  /* Interactive lift. 1px of travel, not a scale transform. */
+  .lift {
+    transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.3, 1),
+      box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .lift:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--e-3), var(--edge-top);
+    border-color: color-mix(in oklab, var(--a-sig-500) 45%, var(--n-700));
+  }
+  .lift:active {
+    transform: translateY(0);
+  }
+
+  /* Hairline rules that sit at the same weight in both themes. */
+  .hairline {
+    border-color: color-mix(in oklab, var(--n-700) 65%, transparent);
+  }
+
+  /* The one place a coloured edge is allowed: the active nav marker. */
+  .rail {
+    position: relative;
+  }
+  .rail::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    translate: 0 -50%;
+    width: 2px;
+    height: 0;
+    border-radius: 0 2px 2px 0;
+    background: var(--a-sig-400);
+    transition: height 0.22s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .rail-active::before {
+    height: 60%;
+  }
+
+  /* ------------------------------------------------------------- TYPE --- */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--n-400);
+  }
+  .metric {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 0.95;
+  }
+  .kbd {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.3rem;
+    border-radius: 4px;
+    background: color-mix(in oklab, var(--n-700) 45%, transparent);
+    border: 1px solid color-mix(in oklab, var(--n-600) 50%, transparent);
+    color: var(--n-300);
+    box-shadow: 0 1px 0 0 color-mix(in oklab, var(--n-600) 60%, transparent);
+    line-height: 1.5;
+  }
+}
+
+/* ---------------------------------------------------------- DENSITY --- */
+:root[data-density="compact"] {
+  --density-row: 0.4rem;
+  --density-cell: 0.5rem;
+  --density-scale: 0.92;
+}
+.density-row {
+  padding-top: var(--density-row);
+  padding-bottom: var(--density-row);
+  transition: padding 0.2s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.density-cell {
+  padding: var(--density-row) var(--density-cell);
+}
+
+/* ---------------------------------------------------------- CURSOR --- */
+/* The native cursor is only hidden once the custom cursor has actually
+   mounted and decided it is allowed to run, so a pointer never vanishes
+   on touch, reduced-motion or if the component is disabled. */
+:root[data-cursor="on"],
+:root[data-cursor="on"] * {
+  cursor: none !important;
+}
+:root[data-cursor="on"] input,
+:root[data-cursor="on"] textarea,
+:root[data-cursor="on"] select,
+:root[data-cursor="on"] [contenteditable="true"] {
+  cursor: text !important;
+}
+
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Trail canvas. `plus-lighter` keeps overlapping trail segments from
+   building up into a solid blob the way `screen` does. */
+.cursor-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 9996;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+}
+:root[data-theme="light"] .cursor-canvas {
+  mix-blend-mode: multiply;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border: 1.25px solid color-mix(in oklab, var(--a-sig-400) 85%, transparent);
+  border-radius: 999px;
+  will-change: transform, width, height, border-radius, opacity;
+}
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  border-radius: 999px;
+  background: var(--n-100);
+  will-change: transform;
+}
+:root[data-theme="light"] .cursor-dot {
+  background: var(--n-200);
+}
+
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--a-sig-400);
+  color: var(--n-950);
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+:root[data-theme="light"] .cursor-label {
+  color: var(--n-1000);
+}
+
+/* ------------------------------------------------------ ANIMATIONS --- */
+@keyframes ztx-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: ztx-fade-up 0.42s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes ztx-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ztx-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+.sweep {
+  animation: ztx-sweep 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* A slow breath for "live" indicators. Replaces `animate-pulse`, which
+   blinks hard enough to read as an error state. */
+@keyframes ztx-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.88);
+  }
+}
+.breathe {
+  animation: ztx-breathe 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Tailwind's animate-pulse is retargeted so the 9 existing uses calm down
+   without touching the markup. */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes ztx-ping-soft {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70%,
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+.ping-soft {
+  animation: ztx-ping-soft 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ztx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-radar {
+  animation: ztx-spin 14s linear infinite;
+}
+
+/* Lockdown. The only moment the UI is permitted to shout — and even then
+   it does it with a slow ochre breath, not a strobe. */
+@keyframes ztx-lockdown {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--a-brick-500) 55%, transparent);
+  }
+  50% {
+    box-shadow: inset 0 0 0 3px color-mix(in oklab, var(--a-brick-400) 80%, transparent);
+  }
+}
+.lockdown-frame::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9995;
+  animation: ztx-lockdown 2.6s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------ SPLASH ------ */
+.splash-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    color-mix(in oklab, var(--n-1000) 85%, transparent) 100%
+  );
+  pointer-events: none;
+}
+.splash-spin-slow {
+  animation: ztx-spin 26s linear infinite;
+}
+.splash-spin-rev {
+  animation: ztx-spin 18s linear infinite reverse;
+}
 .splash-dots::after {
-  content: '';
-  animation: splash-dots 1.2s steps(4, end) infinite;
+  content: "";
+  animation: splash-dots 1.4s steps(4, end) infinite;
 }
 @keyframes splash-dots {
-  0% { content: ''; }
-  25% { content: '.'; }
-  50% { content: '..'; }
-  75% { content: '...'; }
+  0% {
+    content: "";
+  }
+  25% {
+    content: "·";
+  }
+  50% {
+    content: "··";
+  }
+  75% {
+    content: "···";
+  }
 }
 
-/* "Access verified" flash */
-.splash-flash {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 42%, rgba(52,211,153,0.35), transparent 60%);
-  animation: splash-flash 0.9s ease-out forwards;
-  pointer-events: none;
-}
-@keyframes splash-flash {
-  0% { opacity: 0; }
-  30% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
+/* --------------------------------------------- REDUCED MOTION ------- */
 @media (prefers-reduced-motion: reduce) {
-  .splash-spin-slow, .splash-spin-rev, .splash-scan, .splash-shock,
-  .splash-particle, .splash-bar-shine, .splash-shield { animation: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .splash-spin-slow,
+  .splash-spin-rev,
+  .sweep,
+  .breathe,
+  .ping-soft,
+  .animate-radar {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------- PRINT ------ */
+/* Security consoles get screenshotted into incident reports. */
+@media print {
+  :root {
+    --grain-opacity: 0;
+  }
+  .cursor-layer,
+  .cursor-canvas,
+  .cursor-ring,
+  .cursor-dot,
+  .cursor-label,
+  aside,
+  header {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
 }
